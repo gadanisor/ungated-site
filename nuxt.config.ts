@@ -4,13 +4,23 @@ import { fileURLToPath } from 'node:url'
 export default defineNuxtConfig({
   compatibilityDate: '2025-08-16',
 
-  // IMPORTANT: fără SSR → generăm site static în .output/public
+  // Static SPA build → conținutul final ajunge în .output/public
   ssr: false,
 
-  // (poți lăsa presetul netlify sau îl poți omite; pentru generate nu e necesar)
+  // (opțional) păstrat presetul Netlify; pentru generate e ok
   nitro: { preset: 'netlify' },
 
-  css: [ fileURLToPath(new URL('./assets/css/style.css', import.meta.url)) ],
+  // Încarcă stilurile tale + Tailwind
+  css: [
+    fileURLToPath(new URL('./assets/css/tailwind.css', import.meta.url)),
+  ],
+
+  postcss: {
+    plugins: {
+      '@tailwindcss/postcss': {},
+      autoprefixer: {}
+    }
+  },
 
   app: {
     head: {
