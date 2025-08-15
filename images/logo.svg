@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" shape-rendering="geometricPrecision">
+  <!-- Hexagon albastru cu contur alb -->
+  <path
+    d="
+      M50,2
+      Q52,2 54,3.5
+      L86,25
+      Q90,28 90,32
+      L90,68
+      Q90,72 86,75
+      L54,96.5
+      Q52,98 50,98
+      Q48,98 46,96.5
+      L14,75
+      Q10,72 10,68
+      L10,32
+      Q10,28 14,25
+      L46,3.5
+      Q48,2 50,2
+      Z
+    "
+    fill="#007acc"
+    stroke="white"
+    stroke-width="1"
+    vector-effect="non-scaling-stroke"
+  />
+  <!-- U alb, subțiat pentru claritate la dimensiuni mici -->
+  <path
+    d="M35 30 v25 a15 15 0 0 0 30 0 v-25"
+    fill="none"
+    stroke="white"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    vector-effect="non-scaling-stroke"
+  />
+</svg>

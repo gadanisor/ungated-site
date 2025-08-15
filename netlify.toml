@@ -1,0 +1,18 @@
+[build]
+  publish = "."
+
+# Redirect www -> apex
+[[redirects]]
+  from = "https://www.ungated.net/*"
+  to = "https://ungated.net/:splat"
+  status = 301
+  force = true
+
+# Security headers basic
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer-when-downgrade"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
