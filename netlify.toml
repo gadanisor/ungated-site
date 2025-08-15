@@ -1,28 +1,24 @@
 [build]
   command = "npm run build"
-  publish = ".output"
-  functions = ".output/server/functions"
+  publish = ".netlify/functions-internal"
+  functions = ".netlify/functions-internal"
 
-# Redirect www → apex
 [[redirects]]
   from = "https://www.ungated.net/*"
   to = "https://ungated.net/:splat"
   status = 301
   force = true
 
-# API calls către funcția SSR
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/server"
   status = 200
 
-# SSR pentru toate rutele
 [[redirects]]
   from = "/*"
   to = "/.netlify/functions/server"
   status = 200
 
-# Security headers
 [[headers]]
   for = "/*"
   [headers.values]
