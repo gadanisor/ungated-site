@@ -9,15 +9,18 @@
   status = 301
   force = true
 
+# API routes către funcția server
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/server"
   status = 200
 
+# 🔹 Toate rutele (SSR)
 [[redirects]]
   from = "/*"
   to = "/.netlify/functions/server"
   status = 200
+  force = true
 
 [[headers]]
   for = "/*"
