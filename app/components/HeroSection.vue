@@ -9,10 +9,10 @@
         </div>
 
         <h1 class="m-0 text-balance text-[clamp(34px,5vw,60px)] leading-[1.05] tracking-[-.02em]">
-          ...the toolbox worthy of your imagination.
+          The toolbox worthy of your imagination.
         </h1>
 
-        <p class="mt-4 mb-5 mr-20 text-[clamp(16px,2vw,20px)] text-[#9a9a9a] text-justify">
+        <p class="mt-4 mb-5 text-[clamp(16px,2vw,20px)] text-[#9a9a9a] text-justify">
           Ungated is a calm, powerful workspace for writers and world-builders. Draft in a blazing-fast editor, weave characters and places, plot arcs on timelines, and keep your universe coherent — without leaving your flow.
         </p>
 
