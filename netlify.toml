@@ -1,7 +1,7 @@
 [build]
   command = "npm run build"
-  publish = ".netlify/functions-internal"
-  functions = ".netlify/functions-internal"
+  publish = "" # nimic, pentru că e SSR
+  functions = ".netlify/functions"
 
 [[redirects]]
   from = "https://www.ungated.net/*"
@@ -15,7 +15,7 @@
   to = "/.netlify/functions/server"
   status = 200
 
-# 🔹 Toate rutele (SSR)
+# Toate rutele SSR → funcția server
 [[redirects]]
   from = "/*"
   to = "/.netlify/functions/server"

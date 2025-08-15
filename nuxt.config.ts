@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url'
 export default defineNuxtConfig({
   compatibilityDate: '2025-08-16',
   nitro: { preset: 'netlify' },
+  ssr: true,
 
   // CSS global – FĂRĂ src/, la rădăcină:
   css: [ fileURLToPath(new URL('./assets/css/style.css', import.meta.url)) ],
