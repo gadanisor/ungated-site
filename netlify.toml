@@ -1,36 +1,26 @@
 [build]
-  command   = "npm run build"
-  publish   = ".output/public"
-  functions = ".netlify/functions-internal"  # <- pentru Nitro preset netlify
+  command = "npm run build"
+  publish = ".output"
+  functions = ".output/server/functions"
 
-[build.environment]
-  NODE_VERSION = "20"               # sau versiunea ta locală (20/22)
-  NUXT_TELEMETRY_DISABLED = "1"
-
-# 301: www → apex
+# Redirect www → apex
 [[redirects]]
   from = "https://www.ungated.net/*"
-  to   = "https://ungated.net/:splat"
+  to = "https://ungated.net/:splat"
   status = 301
-  force  = true
+  force = true
 
-# API → funcția server (Nuxt Nitro)
+# API calls către funcția SSR
 [[redirects]]
   from = "/api/*"
-  to   = "/.netlify/functions-internal/server"
+  to = "/.netlify/functions/server"
   status = 200
 
-# SSR catch-all
+# SSR pentru toate rutele
 [[redirects]]
   from = "/*"
-  to   = "/.netlify/functions-internal/server"
+  to = "/.netlify/functions/server"
   status = 200
-
-# Cache agresiv pe asseturi
-[[headers]]
-  for = "/_nuxt/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
 
 # Security headers
 [[headers]]
