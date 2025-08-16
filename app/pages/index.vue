@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[#1e1e1e] text-[#d4d4d4]">
+  <div class="bg-[#1f1f1f] text-[#d4d4d4]">
     <HeroSection />
     <FeaturesSection />
     <ShowcaseSection />
