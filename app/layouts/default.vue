@@ -38,14 +38,14 @@
           aria-controls="mobileNav"
           @click="toggleMenu"
           class="inline-flex md:hidden items-center justify-center rounded-[4px] border px-3 py-2 text-sm font-semibold"
-          :class="isLight ? 'border-[#e2e8f0] text-[#1e1e1e]' : 'border-[#2b2b2b] text-[#d4d4d4] hover:border-[#3399ff]'"
+          :class="isLight ? 'border-[#e2e8f0] text-[#181818]' : 'border-[#2b2b2b] text-[#d4d4d4] hover:border-[#3399ff]'"
         >
           Menu
         </button>
       </div>
 
       <!-- Mobile nav -->
-      <div id="mobileNav" v-show="open" :class="isLight ? 'border-t-[#e2e8f0] bg-white text-[#1e1e1e]' : 'border-t-[#2b2b2b] bg-[#1e1e1e] text-[#d4d4d4]'" class="md:hidden border-t">
+      <div id="mobileNav" v-show="open" :class="isLight ? 'border-t-[#e2e8f0] bg-white text-[#1e1e1e]' : 'border-t-[#2b2b2b] bg-[#181818] text-[#d4d4d4]'" class="md:hidden border-t">
         <div class="mx-auto w-full max-w-[1200px] px-5 pb-3">
           <div class="grid gap-3 pt-3">
             <a href="#features" class="opacity-[.95] hover:opacity-100">Features</a>
