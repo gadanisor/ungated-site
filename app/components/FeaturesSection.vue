@@ -17,9 +17,24 @@
               <h4 class="feature-title m-0 flex items-center gap-3 font-semibold">
                 {{ f.title }}
               </h4>
-              <p class="mt-2 text-[#9a9a9a] text-justify">
-                {{ f.text }}
-              </p>
+
+              <!-- paragrafe cu titlu inline -->
+              <div class="mt-2 text-[#9a9a9a] text-justify space-y-2">
+                <p
+                  v-for="(p, j) in getParagraphs(f)"
+                  :key="j"
+                  class="leading-relaxed"
+                >
+                  <template v-if="p.title">
+                    <span
+                      class="inline underline decoration-[#5b5b5b] underline-offset-[3px] font-medium mr-2"
+                    >
+                      {{ p.title }}
+                    </span>
+                  </template>
+                  <span>{{ p.body }}</span>
+                </p>
+              </div>
             </div>
 
             <!-- imagine -->
@@ -39,18 +54,24 @@
 </template>
 
 <script setup>
+// 1) Recomandat: folosește features[].paragraphs = [{ title, body }, ...]
+// 2) Back-compat: dacă există doar `text`, îl împărțim pe \n\n și încercăm să extragem "Titlu - Body"
+
 const features = [
   {
-    title: 'Frictionless Drafting',
-    text:
-      'Write at the speed of thought. Typewriter scrolling, soft wrap, scene separators, inline word/character counts, and focus ranges—everything tuned for long-form flow with zero friction.',
-    img: '/images/hero.png',
-    alt: 'Drafting interface preview'
-  },
-  {
-    title: 'Powerful Analyzer',
-    text:
-      'Beyond spellcheck. It reviews grammar, style, voice, pacing, and readability; flags clichés, filler, adverbs, and passive constructions; and suggests line-level rewrites — purpose-built for creative writing.',
+    title: 'Powerful Writing',
+    paragraphs: [
+      {
+        title: 'Monaco Editor',
+        body:
+          'A familiar, fast, keyboard-centric editor with selections, multi-cursor, and project-wide search.'
+      },
+      {
+        title: 'Analyzer',
+        body:
+          'Beyond spellcheck: grammar, style, voice, pacing, readability; flags clichés, filler, adverbs, and passive; suggests line-level rewrites.'
+      }
+    ],
     img: '/images/problems1.png',
     alt: 'Analyzer and quality panels'
   },
@@ -76,13 +97,34 @@ const features = [
     alt: 'Reader and theme previews'
   }
 ]
+
+// helper: returnează [{ title, body }, ...] indiferent dacă ai paragraphs sau doar text
+const getParagraphs = (f) => {
+  if (Array.isArray(f.paragraphs)) return f.paragraphs
+
+  if (typeof f.text === 'string' && f.text.trim()) {
+    // split pe paragrafe duble
+    const chunks = f.text.split(/\n{2,}/)
+
+    return chunks.map((raw) => {
+      const chunk = raw.trim()
+
+      // încearcă formatele: "Titlu - Body" sau "Titlu — Body" sau "Titlu: Body"
+      const m = chunk.match(/^\s*(.+?)\s*[-–—:]\s+(.+)$/)
+      if (m) {
+        return { title: m[1].trim(), body: m[2].trim() }
+      }
+
+      // fallback: fără titlu, doar text
+      return { title: '', body: chunk }
+    })
+  }
+
+  return []
+}
 </script>
 
 <style>
-.feature-title {
-  font-size: clamp(22px, 3.2vw, 32px); /* was 26px–40px */
-  line-height: 1.12;
-}
 .feature-title {
   font-size: clamp(26px, 3.6vw, 30px) !important; /* scale icons with the smaller title */
   line-height: 1;
