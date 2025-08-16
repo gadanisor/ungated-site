@@ -27,7 +27,7 @@
               <img
                 :src="f.img"
                 :alt="f.alt"
-                class="mt-4 md:mt-0 w-full md:max-w-none aspect-[3/2] object-cover rounded-[6px] border border-[#2b2b2b] bg-[#101010]"
+                class="mt-4 md:mt-0 w-full md:max-w-none aspect-[3/2] object-cover bg-[#101010]"
                 loading="lazy"
               />
             </div>
@@ -93,11 +93,11 @@ const features = [
   font-size: clamp(26px, 3.8vw, 40px);
   line-height: 1.15;
 }
-.feature-title .codicon {
+.feature-title {
   font-size: clamp(34px, 4.6vw, 34px) !important;
   line-height: 1;
   position: relative;
   top: 0.04em;
 }
-.feature-title .codicon { color: inherit; }
+.feature-title { color: inherit; }
 </style>
