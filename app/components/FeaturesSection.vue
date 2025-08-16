@@ -10,20 +10,20 @@
 
       <ul class="divide-y divide-[#2b2b2b]">
         <li v-for="(f, i) in features" :key="i" class="py-7">
-          <!-- GRID: 3 coloane; imaginea 2/3, textul 1/3 (centrat vertical) -->
-          <div class="md:grid md:grid-cols-3 gap-6">
-            <!-- text (centrat vertical în track-ul Grid) -->
+          <!-- GRID: 4 coloane; textul 1/4, imaginea 3/4 (textul centrat vertical) -->
+          <div class="md:grid md:grid-cols-4 gap-6">
+            <!-- text -->
             <div class="md:col-span-1 min-w-0 md:self-center">
               <h4 class="feature-title m-0 flex items-center gap-3 font-semibold">
                 {{ f.title }}
               </h4>
-              <p class="mt-2 text-[#9a9a9a]">
+              <p class="mt-2 text-[#9a9a9a] text-justify">
                 {{ f.text }}
               </p>
             </div>
 
             <!-- imagine -->
-            <div class="md:col-span-2">
+            <div class="md:col-span-3">
               <img
                 :src="f.img"
                 :alt="f.alt"
@@ -50,12 +50,12 @@ const features = [
   {
     title: 'Powerful Analyzer',
     text:
-      'Beyond spellcheck. It reviews grammar, style, voice, pacing, and readability; flags clichés, filler, adverbs, and passive constructions; and suggests line-level rewrites—purpose-built for creative writing.',
+      'Beyond spellcheck. It reviews grammar, style, voice, pacing, and readability; flags clichés, filler, adverbs, and passive constructions; and suggests line-level rewrites — purpose-built for creative writing.',
     img: '/images/problems1.png',
     alt: 'Analyzer and quality panels'
   },
   {
-    title: 'Rich Metadata & Tasking',
+    title: 'Rich Metadata',
     text:
       'Every document carries a Synopsis, Notes, Tasks, and Tags. All tasks roll up into a central Task Manager. Link pages to plot beats, threads, character arcs, and locations so you always know what’s next—and where it belongs.',
     img: '/images/metadata.png',
@@ -85,19 +85,16 @@ const features = [
 ]
 </script>
 
-
 <style>
-@import url('https://cdn.jsdelivr.net/npm/@vscode/codicons/dist/codicon.css');
-
 .feature-title {
-  font-size: clamp(26px, 3.8vw, 40px);
-  line-height: 1.15;
+  font-size: clamp(22px, 3.2vw, 32px); /* was 26px–40px */
+  line-height: 1.12;
 }
 .feature-title {
-  font-size: clamp(34px, 4.6vw, 34px) !important;
+  font-size: clamp(26px, 3.6vw, 30px) !important; /* scale icons with the smaller title */
   line-height: 1;
   position: relative;
   top: 0.04em;
+  color: inherit;
 }
-.feature-title { color: inherit; }
 </style>
