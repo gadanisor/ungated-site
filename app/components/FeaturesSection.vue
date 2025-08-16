@@ -8,7 +8,7 @@
         Familiar layout, purpose-built tools. Keep the comfort of a code editor — minus the code — plus everything you need to grow worlds and stories.
       </p>
 
-      <ul class="divide-y divide-[#2b2b2b]">
+      <ul>
         <li v-for="(f, i) in features" :key="i" class="py-7">
           <!-- GRID: 4 coloane; textul 1/4, imaginea 3/4 (textul centrat vertical) -->
           <div class="md:grid md:grid-cols-4 gap-6">
@@ -64,7 +64,7 @@ const features = [
   {
     title: 'Component System',
     text:
-      'Everything is a component—scenes, chapters, plot points, characters, locations, magic systems, items, factions, and more. Components understand their relationships and come with swappable templates you can tailor per project.',
+      'Everything is a component — scenes, chapters, plot points, characters, locations, magic systems, items, factions, and more. Components understand their relationships and come with swappable templates you can tailor per project. There are over 40 types of components and more are coming.',
     img: '/images/component.png',
     alt: 'Component graph and templates'
   },
@@ -72,15 +72,8 @@ const features = [
     title: 'Reading Mode',
     text:
       'Turn drafts into an immersive, book-like reading view. Adjustable type and spacing, light/dark/custom themes, inline comments and highlights, plus shareable read-only previews for clean feedback.',
-    img: '/images/reading-dark.png',
+    img: '/images/reading.png',
     alt: 'Reader and theme previews'
-  },
-  {
-    title: 'Search that understands prose',
-    text:
-      'Find ideas, not just keywords. Blend semantic and exact search across drafts, notes, and metadata; filter by characters, locations, beats, threads, or tags; save smart collections; jump straight to every reference.',
-    img: 'https://placehold.co/800x600?text=Search',
-    alt: 'Search UI with filters'
   }
 ]
 </script>
