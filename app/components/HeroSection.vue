@@ -10,10 +10,12 @@
       <h1 class="m-0 mb-10 text-balance text-[clamp(38px,5.5vw,64px)] leading-[1.05] tracking-[-.02em] font-extrabold">
         The toolbox worthy of your imagination.
       </h1>
-
-      <div class="flex flex-wrap justify-center gap-4">
+      <p class="mt-4 mb-5 text-[clamp(16px,2vw,20px)] text-[#9a9a9a] text-justify">
+          The world's first true IDE for writers. Ungated is a calm, powerful workspace for writers and world-builders. Draft in a blazing-fast editor, weave characters and places, plot arcs on timelines, and keep your universe coherent — without leaving your flow. All local, all yours. <a href="#" class="text-blue-500">Get it now on your machine!</a>
+        </p>
+      <!--div class="flex flex-wrap justify-center gap-4">
         <a href="#download" class="inline-flex select-none items-center justify-center rounded-[6px] bg-[#007acc] px-6 py-4 font-bold text-white shadow-sm transition-colors hover:bg-[#1fa3ff] focus:outline-none focus-visible:ring-4 focus-visible:ring-[rgba(51,153,255,.35)]">Download for Windows</a>
-      </div>
+      </div-->
     </div>
 
     <!-- Imagine (sub titlu) -->
