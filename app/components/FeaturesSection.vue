@@ -1,7 +1,7 @@
 <template>
-    <section id="features" class="py-15 md:py-16">
+    <section id="features" class="py-15 md:py-16 bg-[#181818]">
       <div class="mx-auto max-w-[1200px] px-5">
-        <h2 class="mb-2 text-[clamp(26px,3.8vw,40px)] leading-[1.15]">Built for creative writing & world-building</h2>
+        <h2 class="mb-2 text-[clamp(26px,3.8vw,40px)] leading-[1.15]">Built for creative writing and world-building</h2>
         <p class="mb-7 text-[#9a9a9a]">Familiar layout, purpose-built tools. Keep the comfort of a code editor — minus the code — plus everything you need to grow worlds and stories.</p>
 
         <div class="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">

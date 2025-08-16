@@ -5,14 +5,14 @@
       :class="[
         'sticky top-0 z-50 border-b',
         isLight
-          ? 'bg-white text-[#1e1e1e] border-[#e2e8f0]'
-          : 'bg-[#1e1e1e] text-[#d4d4d4] border-[#2b2b2b]'
+          ? 'bg-white text-[#181818] border-[#e2e8f0]'
+          : 'bg-[#181818] text-[#d4d4d4] border-[#2b2b2b]'
       ]"
     >
-      <div class="mx-auto flex w-full max-w-[1200px] items-center justify-between gap-4 px-5 py-3">
+      <div class="mx-auto flex w-full max-w-[1300px] items-center justify-between gap-4 px-5 py-3">
         <a class="flex items-center gap-2 no-underline text-inherit" href="#top" aria-label="Ungated home">
           <img src="/images/logo.svg" alt="Ungated logo" class="h-[30px] w-[30px]" />
-          <b class="text-[18px]">Ungated</b>
+          <b class="text-[23px]">UNGATED</b>
         </a>
 
         <!-- Desktop nav -->
@@ -73,7 +73,7 @@
         'mt-10 border-t',
         isLight
           ? 'bg-white text-[#5f5f5f] border-[#e2e8f0]'
-          : 'bg-[#1e1e1e] text-[#9a9a9a] border-[#2b2b2b]'
+          : 'bg-[#181818] text-[#9a9a9a] border-[#2b2b2b]'
       ]"
     >
       <div class="mx-auto flex w-full max-w-[1200px] flex-wrap items-center justify-between gap-4 px-5 py-7">
