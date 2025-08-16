@@ -4,3 +4,8 @@
   </NuxtLayout>
 </template>
 
+<style>
+* {
+  user-select: none;
+}
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex min-h-screen flex-col bg-[#181818] text-[#d4d4d4]">
+  <div class="flex min-h-screen flex-col bg-[#1e1e1e] text-[#d4d4d4]">
     <!-- HEADER -->
     <header
       :class="[
