@@ -74,14 +74,14 @@
 
 <script setup>
 const features = [
-  { icon: "codicon-markdown", title: "Markdown", desc: "Write with plain text power and preview instantly." },
-  { icon: "codicon-notebook", title: "Notebook", desc: "Mix prose with snippets and keep everything organized." },
-  { icon: "codicon-archive", title: "Archive", desc: "Store finished work safely, retrieve when needed." },
-  { icon: "codicon-type-hierarchy", title: "Hierarchy", desc: "Explore structured writing with outlines." },
-  { icon: "codicon-type-hierarchy-super", title: "Super", desc: "Link and reference parent structures." },
-  { icon: "codicon-type-hierarchy-sub", title: "Sub", desc: "Manage nested sections and subtopics." },
-  { icon: "codicon-symbol-class", title: "Classes", desc: "Group your concepts cleanly." },
-  { icon: "codicon-symbol-string", title: "String", desc: "Polish details down to characters." }
+  { icon: "codicon-markdown", title: "Markdown", desc: "Clean Markdown with tables, callouts, footnotes." },
+  { icon: "codicon-link", title: "Backlinking", desc: "Bidirectional links create a knowledge web." },
+  { icon: "codicon-git-compare", title: "Versioning", desc: "Track changes, manage branches, restore instantly." },
+  { icon: "codicon-comment-discussion", title: "Collaboration", desc: "Live cursors, roles, comments, shared project experience." },
+  { icon: "codicon-beaker", title: "Research", desc: "Save quotes and images with sources." },
+  { icon: "codicon-notebook", title: "Encyclopdia", desc: "Document whole worlds as you go on endless quests." },
+  { icon: "codicon-symbol-class", title: "Relationships", desc: "Good stories always have an amazingly structured world." },
+  { icon: "codicon-star-full", title: "Objectives", desc: "Word targets, streaks, readability insights." }
 ];
 </script>
 

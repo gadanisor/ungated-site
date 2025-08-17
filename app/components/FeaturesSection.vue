@@ -51,70 +51,58 @@
 // 2) Back-compat: dacă există doar `text`, îl împărțim pe \n\n și încercăm să extragem "Titlu - Body"
 
 const features = [
+{
+  "title": "Powerful Writing",
+  "paragraphs": [
+    {
+      "body": "Write at the speed of thought in a familiar, fast, keyboard-centric editor. Selections, multi-cursor editing, and project-wide search help you reshape chapters, fix patterns across files, and stay in flow without lifting your hands from the keys."
+    },
+    {
+      "body": "Go beyond spellcheck with real-time guidance on grammar, style, voice, pacing, and readability. It flags clichés, filler, overused adverbs, and passive constructions, then offers crisp, line-level rewrites so your prose stays clear, consistent, and true to your intent."
+    }
+  ],
+  "img": "/images/problems1.png",
+  "alt": "Analyzer and quality panels"
+},
   {
-    title: 'Powerful Writing',
-    paragraphs: [
-      {
-        title: 'Monaco Editor',
-        body:
-          'A familiar, fast, keyboard-centric editor with selections, multi-cursor, and project-wide search.'
-      },
-      {
-        title: 'Analyzer',
-        body:
-          'Beyond spellcheck: grammar, style, voice, pacing, readability; flags clichés, filler, adverbs, and passive; suggests line-level rewrites.'
-      },
-      {
-        title: 'Monaco Editor',
-        body:
-          'A familiar, fast, keyboard-centric editor with selections, multi-cursor, and project-wide search.'
-      }
-    ],
-    img: '/images/problems1.png',
-    alt: 'Analyzer and quality panels'
-  },
-  {
-    title: 'Rich Metadata',
-    paragraphs: [
-      {
-        title: "Synopsys",
-        body: 'It will help identify the content of a document without reading it. It will become extremely helpful when using the plotting tools as well.'
-      },
-      {
-        title: "Plot",
-        body: 'Associate files with plot points, threads, character arcs etc. You can easily view and manage everything related to plot while working on your draft.'
-      },
-      {
-        title: "Notes",
-        body: 'As opposed to in-document comments, notes will be gathered in a  centralizeed view, so you never lose sight of anything.'
-      },
-      {
-        title: "Tags",
-        body: 'Create tags and use them to filter your work in a smart way.'
-      },
-      {
-        title: "Tasks",
-        body: 'Just like notes, the tasks in every document will be viewable in a centralized dashboard, so you can always work on what matters.'
-      },
-
-    ],
+  "title": "Rich Metadata",
+  "paragraphs": [
+    {
+      "body": "Understand any document at a glance with a clear synopsis. Rich metadata also connects with plotting tools, linking files to plot points, threads, and character arcs so you can see and manage story structure as you write."
+    },
+    {
+      "body": "Keep everything organized and actionable: notes live in one centralized view, tags let you filter work intelligently, and tasks roll up into a single dashboard so you always focus on what matters."
+    }
+  ],
     img: '/images/metadata.png',
     alt: 'Synopsis, notes, tags, and task rollups'
   },
   {
-    title: 'Component System',
-    text:
-      'Everything is a component — scenes, chapters, plot points, characters, locations, magic systems, items, factions, and more. Components understand their relationships and come with swappable templates you can tailor per project. There are over 40 types of components and more are coming.',
-    img: '/images/component.png',
-    alt: 'Component graph and templates'
-  },
+  "title": "Component System",
+  "paragraphs": [
+    {
+      "body": "Everything in your story becomes a component — scenes, chapters, plot points, characters, locations, items, factions, magic systems, and more. The components you create understand their relationships, making it easy to see who appears where, what influences what, and how threads evolve across the work."
+    },
+    {
+      "body": "Kick off with swappable templates tailored per project, then adapt and expand as your world grows. With 40+ component types (and counting), you can model the right level of detail, reuse structures across drafts, and keep worldbuilding, plot, and revisions perfectly aligned."
+    }
+  ],
+  "img": "/images/component.png",
+  "alt": "Component graph and templates"
+},
   {
-    title: 'Reading Mode',
-    text:
-      'Turn drafts into an immersive, book-like reading view. Adjustable type and spacing, light/dark/custom themes, inline comments and highlights, plus shareable read-only previews for clean feedback.',
-    img: '/images/reading.png',
-    alt: 'Reader and theme previews'
-  }
+  "title": "Reading Mode",
+  "paragraphs": [
+    {
+      "body": "Turn drafts into an immersive, book-like reading view with adjustable typography, spacing, and margins. Switch instantly between light, dark, or custom themes to match your eyes and environment."
+    },
+    {
+      "body": "Review with clarity: inline comments and highlights stay anchored to the text, while shareable read-only previews invite clean, distraction-free feedback from collaborators and beta readers."
+    }
+  ],
+  "img": "/images/reading.png",
+  "alt": "Reader and theme previews"
+}
 ]
 
 // helper: returnează [{ title, body }, ...] indiferent dacă ai paragraphs sau doar text
