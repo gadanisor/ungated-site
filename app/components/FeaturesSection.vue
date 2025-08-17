@@ -1,7 +1,13 @@
 <template>
   <section id="features" class="py-15 md:py-16 bg-[#181818]">
     <div class="mx-auto max-w-[1300px] px-5">
-      <ul>
+      <h2 class="text-[clamp(26px,3.8vw,40px)] leading-[1.15]">
+          Features - The IDE built with writers in mind
+        </h2>
+        <p class="mb-6 text-[#9a9a9a]">
+          
+        </p>
+      <ul class="divide-y divide-[#2b2b2b]">
         <li v-for="(f, i) in features" :key="i" class="py-7">
           <!-- GRID: 4 coloane; textul 1/4, imaginea 3/4 (textul centrat vertical) -->
           <div class="md:grid md:grid-cols-4 gap-6">
@@ -52,7 +58,7 @@
 
 const features = [
 {
-  "title": "Powerful Writing",
+  "title": "Powerful Drafting",
   "paragraphs": [
     {
       "body": "Write at the speed of thought in a familiar, fast, keyboard-centric editor. Selections, multi-cursor editing, and project-wide search help you reshape chapters, fix patterns across files, and stay in flow without lifting your hands from the keys."

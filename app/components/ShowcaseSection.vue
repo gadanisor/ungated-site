@@ -7,7 +7,7 @@
           Built with creative writing in mind
         </h2>
         <p class="mb-6 text-[#9a9a9a]">
-          A clean grid of highlights — each card has an icon, title, and short description.
+          Get to know some of the rich feature set offered by Ungated, build by writers - for writers.
         </p>
 
         <!-- grid of cards -->
