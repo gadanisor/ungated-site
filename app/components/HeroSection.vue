@@ -8,7 +8,7 @@
     <div class="text-center max-w-4xl relative z-10">
 
       <h1 class="m-0 mb-10 text-balance text-[clamp(38px,5.5vw,64px)] leading-[1.05] tracking-[-.02em] font-extrabold">
-        The toolbox worthy of your imagination.
+        Meet Ungated - the toolbox worthy of your imagination.
       </h1>
       <p class="mt-4 mb-5 text-[clamp(16px,2vw,20px)] text-[#9a9a9a] text-justify">
           The world's first true IDE for writers. Ungated is a calm, powerful workspace for writers and world-builders. Draft in a blazing-fast editor, weave characters and places, plot arcs on timelines, and keep your universe coherent — without leaving your flow. All local, all yours. <a href="#" class="text-blue-500">Get it now on your machine!</a>
