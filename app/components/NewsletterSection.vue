@@ -1,6 +1,6 @@
 <template>
     <section id="newsletter" class="py-15 md:py-16">
-      <div class="mx-auto max-w-[1200px] px-5">
+      <div class="mx-auto max-w-[1300px] px-5">
         <h2 class="text-[clamp(26px,3.8vw,40px)] leading-[1.15]">Get launch updates</h2>
         <p class="mb-4 text-[#9a9a9a]">No spam. Only major releases, tips, and themes.</p>
         <form class="flex flex-wrap gap-2" method="post" action="https://formspree.io/f/your-id">

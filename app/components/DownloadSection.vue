@@ -1,6 +1,6 @@
 <template>
     <section id="download" aria-label="Download Ungated" class="py-15 md:py-16 bg-[#181818]">
-      <div class="mx-auto max-w-[1200px] px-5">
+      <div class="mx-auto max-w-[1300px] px-5">
         <h2 class="text-[clamp(26px,3.8vw,40px)] leading-[1.15]">Download</h2>
         <p class="mb-5 text-[#9a9a9a]">Universal installers. Optimized builds for Apple Silicon, Intel, Windows and major Linux distros.</p>
         <div class="flex flex-wrap gap-3">

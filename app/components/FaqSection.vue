@@ -1,6 +1,6 @@
 <template>
     <section id="faq" aria-label="Frequently asked questions" class="py-15 md:py-16 bg-[#181818]">
-      <div class="mx-auto max-w-[1200px] px-5">
+      <div class="mx-auto max-w-[1300px] px-5">
         <h2 class="text-[clamp(26px,3.8vw,40px)] leading-[1.15] mb-5">FAQ</h2>
         <details class="rounded-[4px] border border-[#2b2b2b] bg-[#1e1e1e] p-4">
           <summary class="cursor-pointer font-bold">Is Ungated based on VS Code?</summary>
