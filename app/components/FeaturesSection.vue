@@ -1,13 +1,6 @@
 <template>
   <section id="features" class="py-15 md:py-16 bg-[#181818]">
     <div class="mx-auto max-w-[1300px] px-5">
-      <h2 class="mb-2 text-[clamp(26px,3.8vw,40px)] leading-[1.15]">
-        Built with creative writing and world-building in mind
-      </h2>
-      <p class="mb-7 text-[#9a9a9a]">
-        Familiar layout, purpose-built tools. Keep the comfort of a code editor — minus the code — plus everything you need to grow worlds and stories.
-      </p>
-
       <ul>
         <li v-for="(f, i) in features" :key="i" class="py-7">
           <!-- GRID: 4 coloane; textul 1/4, imaginea 3/4 (textul centrat vertical) -->
@@ -70,6 +63,11 @@ const features = [
         title: 'Analyzer',
         body:
           'Beyond spellcheck: grammar, style, voice, pacing, readability; flags clichés, filler, adverbs, and passive; suggests line-level rewrites.'
+      },
+      {
+        title: 'Monaco Editor',
+        body:
+          'A familiar, fast, keyboard-centric editor with selections, multi-cursor, and project-wide search.'
       }
     ],
     img: '/images/problems1.png',
@@ -77,8 +75,29 @@ const features = [
   },
   {
     title: 'Rich Metadata',
-    text:
-      'Every document carries a Synopsis, Notes, Tasks, and Tags. All tasks roll up into a central Task Manager. Link pages to plot beats, threads, character arcs, and locations so you always know what’s next—and where it belongs.',
+    paragraphs: [
+      {
+        title: "Synopsys",
+        body: 'It will help identify the content of a document without reading it. It will become extremely helpful when using the plotting tools as well.'
+      },
+      {
+        title: "Plot",
+        body: 'Associate files with plot points, threads, character arcs etc. You can easily view and manage everything related to plot while working on your draft.'
+      },
+      {
+        title: "Notes",
+        body: 'As opposed to in-document comments, notes will be gathered in a  centralizeed view, so you never lose sight of anything.'
+      },
+      {
+        title: "Tags",
+        body: 'Create tags and use them to filter your work in a smart way.'
+      },
+      {
+        title: "Tasks",
+        body: 'Just like notes, the tasks in every document will be viewable in a centralized dashboard, so you can always work on what matters.'
+      },
+
+    ],
     img: '/images/metadata.png',
     alt: 'Synopsis, notes, tags, and task rollups'
   },

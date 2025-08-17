@@ -46,7 +46,7 @@
 
       <!-- Mobile nav -->
       <div id="mobileNav" v-show="open" :class="isLight ? 'border-t-[#e2e8f0] bg-white text-[#1e1e1e]' : 'border-t-[#2b2b2b] bg-[#181818] text-[#d4d4d4]'" class="md:hidden border-t">
-        <div class="mx-auto w-full max-w-[1200px] px-5 pb-3">
+        <div class="mx-auto w-full max-w-[1300px] px-5 pb-3">
           <div class="grid gap-3 pt-3">
             <a href="#features" class="opacity-[.95] hover:opacity-100">Features</a>
             <a href="#showcase" class="opacity-[.95] hover:opacity-100">Screenshots</a>
@@ -76,7 +76,7 @@
           : 'bg-[#181818] text-[#9a9a9a] border-[#2b2b2b]'
       ]"
     >
-      <div class="mx-auto flex w-full max-w-[1200px] flex-wrap items-center justify-between gap-4 px-5 py-7">
+      <div class="mx-auto flex w-full max-w-[1300px] flex-wrap items-center justify-between gap-4 px-5 py-7">
         <small>© {{ year }} Ungated. All rights reserved.</small>
         <div class="flex items-center gap-4">
           <a href="#privacy" class="hover:opacity-100 opacity-[.9]">Privacy</a>
