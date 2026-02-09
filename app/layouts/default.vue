@@ -10,25 +10,88 @@
       ]"
     >
       <div class="mx-auto flex w-full max-w-[1300px] items-center justify-between gap-4 px-5 py-3">
-        <a class="flex items-center gap-2 no-underline text-inherit" href="#top" aria-label="Ungated home">
+        <NuxtLink
+          to="/"
+          class="flex items-center gap-2 no-underline text-inherit"
+          aria-label="Ungated home"
+        >
           <img src="/images/logo.svg" alt="Ungated logo" class="h-[30px] w-[30px]" />
           <b class="text-[23px]">UNGATED</b>
-        </a>
+        </NuxtLink>
 
         <!-- Desktop nav -->
-        <nav
-          class="hidden md:flex items-center gap-[18px] font-semibold"
-          aria-label="Primary"
-        >
-          <a class="opacity-[.85] hover:opacity-100" href="#features">Features</a>
-          <a class="opacity-[.85] hover:opacity-100" href="#showcase">Screenshots</a>
-          <a class="opacity-[.85] hover:opacity-100" href="#pricing">Pricing</a>
-          <a class="opacity-[.85] hover:opacity-100" href="#faq">FAQ</a>
-          <a
-            href="#download"
+        <nav class="hidden md:flex items-center gap-[18px] font-semibold" aria-label="Primary">
+          <NuxtLink to="/#features" class="opacity-[.85] hover:opacity-100">Features</NuxtLink>
+          <NuxtLink to="/#showcase" class="opacity-[.85] hover:opacity-100">Screenshots</NuxtLink>
+          <NuxtLink to="/#pricing" class="opacity-[.85] hover:opacity-100">Pricing</NuxtLink>
+          <NuxtLink to="/#faq" class="opacity-[.85] hover:opacity-100">FAQ</NuxtLink>
+
+          <NuxtLink
+            to="/#download"
             class="inline-flex items-center justify-center rounded-[4px] border border-transparent bg-[#007acc] px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-[#1fa3ff] focus:outline-none focus-visible:ring-4 focus-visible:ring-[rgba(51,153,255,.35)]"
-            >Download</a
           >
+            Download
+          </NuxtLink>
+
+          <!-- Account button (single) -->
+          <div class="relative">
+            <!-- Not logged in -->
+            <NuxtLink
+              v-if="!user"
+              to="/login"
+              class="inline-flex items-center justify-center rounded-[4px] border px-4 py-2 text-sm font-bold transition-colors focus:outline-none focus-visible:ring-4 focus-visible:ring-[rgba(51,153,255,.35)]"
+              :class="isLight
+                ? 'border-[#e2e8f0] text-[#181818] hover:bg-[#f1f5f9]'
+                : 'border-[#2b2b2b] text-[#d4d4d4] hover:border-[#3399ff]'"
+            >
+              Log in
+            </NuxtLink>
+
+            <!-- Logged in -->
+            <button
+              v-else
+              type="button"
+              @click="toggleAccountMenu"
+              @keydown.esc="closeAccountMenu"
+              class="inline-flex items-center justify-center gap-2 rounded-[4px] border px-4 py-2 text-sm font-bold transition-colors focus:outline-none focus-visible:ring-4 focus-visible:ring-[rgba(51,153,255,.35)]"
+              :class="isLight
+                ? 'border-[#e2e8f0] text-[#181818] hover:bg-[#f1f5f9]'
+                : 'border-[#2b2b2b] text-[#d4d4d4] hover:border-[#3399ff]'"
+              aria-haspopup="menu"
+              :aria-expanded="accountOpen ? 'true' : 'false'"
+            >
+              Account
+              <span class="text-xs opacity-80">▾</span>
+            </button>
+
+            <!-- Dropdown -->
+            <div
+              v-if="user && accountOpen"
+              class="absolute right-0 mt-2 w-44 overflow-hidden rounded-[6px] border shadow-lg"
+              :class="isLight
+                ? 'bg-white text-[#181818] border-[#e2e8f0]'
+                : 'bg-[#181818] text-[#d4d4d4] border-[#2b2b2b]'"
+              role="menu"
+            >
+              <NuxtLink
+                to="/dashboard"
+                class="block px-4 py-2 text-sm hover:opacity-100 opacity-[.95]"
+                role="menuitem"
+                @click="closeAccountMenu"
+              >
+                Dashboard
+              </NuxtLink>
+
+              <button
+                type="button"
+                class="block w-full text-left px-4 py-2 text-sm hover:opacity-100 opacity-[.95]"
+                role="menuitem"
+                @click="signOut"
+              >
+                Log out
+              </button>
+            </div>
+          </div>
         </nav>
 
         <!-- Mobile toggle -->
@@ -45,18 +108,61 @@
       </div>
 
       <!-- Mobile nav -->
-      <div id="mobileNav" v-show="open" :class="isLight ? 'border-t-[#e2e8f0] bg-white text-[#1e1e1e]' : 'border-t-[#2b2b2b] bg-[#181818] text-[#d4d4d4]'" class="md:hidden border-t">
+      <div
+        id="mobileNav"
+        v-show="open"
+        :class="isLight ? 'border-t-[#e2e8f0] bg-white text-[#1e1e1e]' : 'border-t-[#2b2b2b] bg-[#181818] text-[#d4d4d4]'"
+        class="md:hidden border-t"
+      >
         <div class="mx-auto w-full max-w-[1300px] px-5 pb-3">
           <div class="grid gap-3 pt-3">
-            <a href="#features" class="opacity-[.95] hover:opacity-100">Features</a>
-            <a href="#showcase" class="opacity-[.95] hover:opacity-100">Screenshots</a>
-            <a href="#pricing" class="opacity-[.95] hover:opacity-100">Pricing</a>
-            <a href="#faq" class="opacity-[.95] hover:opacity-100">FAQ</a>
-            <a
-              href="#download"
+            <NuxtLink to="/#features" class="opacity-[.95] hover:opacity-100">Features</NuxtLink>
+            <NuxtLink to="/#showcase" class="opacity-[.95] hover:opacity-100">Screenshots</NuxtLink>
+            <NuxtLink to="/#pricing" class="opacity-[.95] hover:opacity-100">Pricing</NuxtLink>
+            <NuxtLink to="/#faq" class="opacity-[.95] hover:opacity-100">FAQ</NuxtLink>
+
+            <NuxtLink
+              to="/#download"
               class="inline-flex w-max items-center justify-center rounded-[4px] border border-transparent bg-[#007acc] px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-[#1fa3ff] focus:outline-none focus-visible:ring-4 focus-visible:ring-[rgba(51,153,255,.35)]"
-              >Download</a
             >
+              Download
+            </NuxtLink>
+
+            <!-- Account button (single) -->
+            <NuxtLink
+              v-if="!user"
+              to="/login"
+              class="inline-flex w-max items-center justify-center rounded-[4px] border px-4 py-2 text-sm font-bold transition-colors focus:outline-none focus-visible:ring-4 focus-visible:ring-[rgba(51,153,255,.35)]"
+              :class="isLight
+                ? 'border-[#e2e8f0] text-[#181818] hover:bg-[#f1f5f9]'
+                : 'border-[#2b2b2b] text-[#d4d4d4] hover:border-[#3399ff]'"
+            >
+              Log in
+            </NuxtLink>
+
+            <div v-else class="grid gap-2 pt-2">
+              <NuxtLink
+                to="/dashboard"
+                class="inline-flex w-max items-center justify-center rounded-[4px] border px-4 py-2 text-sm font-bold transition-colors focus:outline-none focus-visible:ring-4 focus-visible:ring-[rgba(51,153,255,.35)]"
+                :class="isLight
+                  ? 'border-[#e2e8f0] text-[#181818] hover:bg-[#f1f5f9]'
+                  : 'border-[#2b2b2b] text-[#d4d4d4] hover:border-[#3399ff]'"
+                @click="open = false"
+              >
+                Account
+              </NuxtLink>
+
+              <button
+                type="button"
+                class="inline-flex w-max items-center justify-center rounded-[4px] border px-4 py-2 text-sm font-bold transition-colors focus:outline-none focus-visible:ring-4 focus-visible:ring-[rgba(51,153,255,.35)]"
+                :class="isLight
+                  ? 'border-[#e2e8f0] text-[#181818] hover:bg-[#f1f5f9]'
+                  : 'border-[#2b2b2b] text-[#d4d4d4] hover:border-[#3399ff]'"
+                @click="signOut"
+              >
+                Log out
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -87,7 +193,9 @@
             class="rounded-[4px] border px-3 py-1.5 text-sm font-semibold focus:outline-none focus-visible:ring-4 focus-visible:ring-[rgba(51,153,255,.35)]"
             :class="isLight ? 'border-[#e2e8f0] text-[#1e1e1e]' : 'border-[#2b2b2b] text-[#d4d4d4] hover:border-[#3399ff]'"
             aria-label="Toggle theme"
-          >Toggle theme</button>
+          >
+            Toggle theme
+          </button>
         </div>
       </div>
     </footer>
@@ -99,6 +207,7 @@ import { ref, onMounted } from 'vue'
 
 const open = ref(false)
 const isLight = ref(false) // default dark, toggled to light
+const accountOpen = ref(false)
 
 const toggleMenu = () => {
   open.value = !open.value
@@ -117,4 +226,22 @@ onMounted(() => {
     isLight.value = saved === 'light'
   }
 })
+
+const user = useSupabaseUser()
+const client = useSupabaseClient()
+
+const toggleAccountMenu = () => {
+  accountOpen.value = !accountOpen.value
+}
+
+const closeAccountMenu = () => {
+  accountOpen.value = false
+}
+
+async function signOut() {
+  closeAccountMenu()
+  await client.auth.signOut()
+  open.value = false
+  await navigateTo('/')
+}
 </script>
