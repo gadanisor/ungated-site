@@ -1,46 +1,45 @@
-import type { Database } from '../types/supabase' // ajustează dacă path-ul diferă
+import type { Database } from '../types/supabase'
 
-type Profile = {
-  id: string
-  email: string | null
-  name: string | null
-  username: string | null
-  avatar_url: string | null
-  plan: string | null
-  billing_status: string | null
-  updated_at: string | null
-}
-
+type Profile = Database['public']['Tables']['profiles']['Row']
 type ProfileInsert = Database['public']['Tables']['profiles']['Insert']
 
 function toUsername(email: string) {
-  return (email.split('@')[0] || 'user')
-    .toLowerCase()
-    .replace(/[^a-z0-9-_]/g, '')
+  return (email.split('@')[0] || 'user').toLowerCase().replace(/[^a-z0-9-_]/g, '')
 }
 
 export const useProfile = () => {
   const client = useSupabaseClient<Database>()
   const user = useSupabaseUser()
 
-  return useAsyncData<Profile | null>(
-    // 🔑 key dependent de user → NU se mai lipește cache-ul
-    () => (user.value?.id ? `profile:${user.value.id}` : 'profile:anon'),
+  const data = ref<Profile | null>(null)
+  const pending = ref(false)
+  const error = ref<unknown>(null)
 
-    async () => {
-      if (!user.value) return null
+  async function refresh() {
+    error.value = null
 
-      // 1️⃣ încercăm să citim profilul
-      const { data, error } = await client
+    // așteaptă până există user (rehydration după refresh)
+    if (!user.value) {
+      data.value = null
+      return null
+    }
+
+    pending.value = true
+    try {
+      // 1) select
+      const { data: prof, error: e1 } = await client
         .from('profiles')
-        .select('id,email,name,username,avatar_url,plan,billing_status,updated_at')
+        .select('*')
         .eq('id', user.value.id)
         .maybeSingle()
 
-      if (error) throw error
-      if (data) return data as Profile
+      if (e1) throw e1
+      if (prof) {
+        data.value = prof
+        return prof
+      }
 
-      // 2️⃣ NU există → îl creăm (exact ca în aplicație)
+      // 2) dacă nu există -> creăm row
       const email = user.value.email ?? ''
       const username = toUsername(email)
       const avatar = `https://api.dicebear.com/7.x/thumbs/svg?seed=${encodeURIComponent(username)}`
@@ -56,25 +55,42 @@ export const useProfile = () => {
         updated_at: new Date().toISOString(),
       }
 
-      const { error: insertError } = await client
-        .from('profiles')
-        .upsert(payload, { onConflict: 'id' })
+      const { error: e2 } = await client.from('profiles').upsert(payload, { onConflict: 'id' })
+      if (e2) throw e2
 
-      if (insertError) throw insertError
-
-      // 3️⃣ recitim profilul
-      const { data: data2, error: error2 } = await client
+      // 3) recitim
+      const { data: prof2, error: e3 } = await client
         .from('profiles')
-        .select('id,email,name,username,avatar_url,plan,billing_status,updated_at')
+        .select('*')
         .eq('id', user.value.id)
         .maybeSingle()
 
-      if (error2) throw error2
-      return (data2 ?? null) as Profile | null
-    },
-    {
-      server: false, // 🚨 cheia: nu SSR → are session → RLS OK
-      watch: [user],
+      if (e3) throw e3
+      data.value = prof2 ?? null
+      return data.value
+    } catch (e) {
+      error.value = e
+      data.value = null
+      throw e
+    } finally {
+      pending.value = false
     }
+  }
+
+  // când apare/dispare userul, reîncarcă profilul
+  watch(
+    () => user.value?.id,
+    async (id) => {
+      if (!id) {
+        data.value = null
+        return
+      }
+      // mic delay ca să fie sigur că session e stabilă
+      await nextTick()
+      await refresh().catch(() => {})
+    },
+    { immediate: true }
   )
+
+  return { data, pending, error, refresh }
 }

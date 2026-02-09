@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { useProfile } from '../../../composables/useProfile'
 import { useMySubscription } from '../../../composables/useMySubscription'
 import type { Database } from '../../../types/supabase'
 
-definePageMeta({ middleware: 'auth' })
+definePageMeta({
+  middleware: 'auth',
+  ssr: false,
+})
 
 const client = useSupabaseClient<Database>()
-const authUser = useSupabaseUser()
 
-const { data: profile, refresh: refreshProfile } = await useProfile()
-const { data: subscription } = await useMySubscription()
-
+type ProfileRow = Database['public']['Tables']['profiles']['Row']
 type ProfileInsert = Database['public']['Tables']['profiles']['Insert']
-type ProfileUpdate = Database['public']['Tables']['profiles']['Update']
+
+const profile = ref<ProfileRow | null>(null)
 
 const form = reactive({
   name: '',
@@ -24,18 +24,78 @@ const saving = ref(false)
 const saved = ref(false)
 const errorMsg = ref<string | null>(null)
 
-watch(
-  profile,
-  (p) => {
-    if (!p) return
-    form.name = p.name ?? ''
-    form.username = p.username ?? ''
-    form.avatar_url = p.avatar_url ?? ''
-  },
-  { immediate: true }
-)
+const { data: subscription } = await useMySubscription()
 
-const email = computed(() => profile.value?.email ?? authUser.value?.email ?? '')
+function toUsername(email: string) {
+  return (email.split('@')[0] || 'user').toLowerCase().replace(/[^a-z0-9-_]/g, '')
+}
+const userId = ref<string>('')
+async function loadProfile() {
+  errorMsg.value = null
+
+  const { data: ures, error: uerr } = await client.auth.getUser()
+  if (uerr) throw uerr
+  const user = ures.user
+  userId.value = user?.id ?? ''
+  if (!user) {
+    profile.value = null
+    return
+  }
+
+  // 1) try select
+  const { data: prof, error: e1 } = await client
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .maybeSingle()
+
+  if (e1) throw e1
+
+  // 2) dacă nu există row, îl creăm (exact ca în app)
+  if (!prof) {
+    const email = user.email ?? ''
+    const username = toUsername(email)
+    const avatar = `https://api.dicebear.com/7.x/thumbs/svg?seed=${encodeURIComponent(username)}`
+
+    const payload: ProfileInsert = {
+      id: user.id,
+      email,
+      name: email,
+      username,
+      avatar_url: avatar,
+      plan: 'free',
+      billing_status: 'inactive',
+      updated_at: new Date().toISOString(),
+    }
+
+    const { error: e2 } = await client.from('profiles').insert(payload)
+    if (e2) throw e2
+
+    const { data: prof2, error: e3 } = await client
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .maybeSingle()
+
+    if (e3) throw e3
+    profile.value = prof2 ?? null
+  } else {
+    profile.value = prof
+  }
+
+  // populate form
+  form.name = profile.value?.name ?? ''
+  form.username = profile.value?.username ?? ''
+  form.avatar_url = profile.value?.avatar_url ?? ''
+}
+
+onMounted(() => {
+  loadProfile().catch((e: any) => {
+    errorMsg.value = e?.message ?? String(e)
+  })
+})
+
+const email = computed(() => profile.value?.email ?? '')
 const plan = computed(() => (profile.value as any)?.plan ?? subscription.value?.plan ?? 'free')
 const billingStatus = computed(() => (profile.value as any)?.billing_status ?? 'inactive')
 
@@ -72,55 +132,42 @@ const hasChanges = computed(() => {
 async function saveProfile() {
   errorMsg.value = null
   saved.value = false
-
   saving.value = true
+
   try {
-    // ✅ ia user-ul real (din token-ul curent)
-    const { data: userRes, error: userErr } = await client.auth.getUser()
-    if (userErr || !userRes.user) {
-      errorMsg.value = 'Not authenticated (no session on client). Please re-login.'
-      return
-    }
+    const { data: ures } = await client.auth.getUser()
+    const user = ures.user
+    if (!user) return
 
-    const uid = userRes.user.id
-    const userEmail = userRes.user.email ?? ''
-
-    const payload: ProfileInsert = {
-      id: uid,
-      email: userEmail,
-      name: form.name.trim(),
-      username: form.username.trim(),
-      avatar_url: form.avatar_url.trim(),
+    const payload: Database['public']['Tables']['profiles']['Update'] = {
+      name: form.name.trim() || undefined,
+      username: form.username.trim() || undefined,
+      avatar_url: form.avatar_url.trim() || undefined,
       updated_at: new Date().toISOString(),
     }
 
-    // ✅ upsert = insert dacă nu există, update dacă există
-    const { error } = await client
-      .from('profiles')
-      .upsert(payload, { onConflict: 'id' })
+    const { error } = await client.from('profiles').update(payload).eq('id', user.id)
+    if (error) throw error
 
-    if (error) {
-      errorMsg.value = error.message
-      return
-    }
-
-    await refreshProfile()
+    await loadProfile()
     saved.value = true
     setTimeout(() => (saved.value = false), 1600)
+  } catch (e: any) {
+    errorMsg.value = e?.message ?? String(e)
   } finally {
     saving.value = false
   }
 }
 
 function resetForm() {
-  const p = profile.value
-  form.name = p?.name ?? ''
-  form.username = p?.username ?? ''
-  form.avatar_url = p?.avatar_url ?? ''
+  form.name = profile.value?.name ?? ''
+  form.username = profile.value?.username ?? ''
+  form.avatar_url = profile.value?.avatar_url ?? ''
   errorMsg.value = null
   saved.value = false
 }
 </script>
+
 
 
 <template>
@@ -165,7 +212,7 @@ function resetForm() {
         <div class="mt-6 border-t border-[#2b2b2b] pt-5 text-sm text-[#9a9a9a] space-y-1.5">
           <div class="flex items-center justify-between">
             <span>User ID</span>
-            <span class="text-[#d4d4d4] truncate max-w-[220px] text-right">{{ authUser?.id }}</span>
+            <span class="text-[#d4d4d4] truncate max-w-[220px] text-right">{{ userId }}</span>
           </div>
           <div class="flex items-center justify-between" v-if="profile?.updated_at">
             <span>Last update</span>
