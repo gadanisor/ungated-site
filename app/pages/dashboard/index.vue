@@ -60,7 +60,6 @@ async function loadProfile() {
       return
     }
 
-    // 1) try select
     const { data: prof, error: e1 } = await client
       .from('profiles')
       .select('*')
@@ -69,11 +68,12 @@ async function loadProfile() {
 
     if (e1) throw e1
 
-    // 2) dacă nu există row, îl creăm
     if (!prof) {
       const email = user.email ?? ''
       const username = toUsername(email)
-      const avatar = `https://api.dicebear.com/7.x/thumbs/svg?seed=${encodeURIComponent(username)}&backgroundColor=1e1e1e`
+      const avatar = `https://api.dicebear.com/7.x/thumbs/svg?seed=${encodeURIComponent(
+        username
+      )}&backgroundColor=1e1e1e`
 
       const payload: ProfileInsert = {
         id: user.id,
@@ -101,7 +101,6 @@ async function loadProfile() {
       profile.value = prof
     }
 
-    // populate form
     resetForm()
   } catch (e: any) {
     errorMsg.value = e?.message ?? String(e)
@@ -132,31 +131,20 @@ const avatarSrc = computed(() => {
   const url = (form.avatar_url || '').trim()
   if (url) return url
 
-  const seed =
-    (form.username ||
-      form.name ||
-      email.value ||
-      'user')
-      .toString()
-      .trim()
-      .toLowerCase()
-
+  const seed = (form.username || form.name || email.value || 'user').toString().trim().toLowerCase()
   return `https://api.dicebear.com/7.x/thumbs/svg?seed=${encodeURIComponent(seed)}&backgroundColor=1e1e1e`
 })
 
 const usernameHint = computed(() => {
   const v = (form.username || '').trim()
-  if (!v) return 'Opțional. Poate fi afișat public.'
-  if (v.length < 3) return 'Cam scurt. Recomand minim 3 caractere.'
-  if (v.length > 24) return 'Maxim 24 caractere.'
-  if (!/^[a-z0-9-_]+$/.test(v)) return 'Folosește doar litere mici, cifre, - și _.'
-  return 'Arată bine.'
+  if (!v) return 'Optional'
+  if (v.length < 3) return 'Minumum 3 characters'
+  if (v.length > 24) return 'Maximum 24 characters'
+  if (!/^[a-z0-9-_]+$/.test(v)) return 'Only lowercase letters, digits, - and _'
 })
 
 const usernameInvalid = computed(() => {
-  // validăm strict doar când editezi (altfel nu “țipă” UI-ul)
   if (!editingProfile.value) return false
-
   const v = (form.username || '').trim()
   if (!v) return false
   if (v.length < 3) return true
@@ -192,7 +180,7 @@ async function saveProfile() {
   saved.value = false
 
   if (usernameInvalid.value) {
-    errorMsg.value = 'Username invalid. Folosește doar litere mici, cifre, - și _. (3–24 caractere)'
+    errorMsg.value = 'Invalid username. 3–24 charracters, only lowercase letters, digits, - and _.'
     return
   }
 
@@ -230,7 +218,6 @@ function resetForm() {
   saved.value = false
 }
 
-/** Profile edit controls */
 function startEditProfile() {
   errorMsg.value = null
   saved.value = false
@@ -252,362 +239,525 @@ type TabKey = 'profile' | 'account' | 'billing'
 const activeTab = ref<TabKey>('profile')
 
 watch(activeTab, () => {
-  // dacă schimbi tab-ul în timp ce editezi, reset + exit edit
   if (editingProfile.value) cancelEditProfile()
 })
 
 const billingPill = computed(() => {
   return billingStatus.value === 'active'
     ? 'border-[rgba(34,197,94,.35)] bg-[rgba(34,197,94,.10)] text-[#22c55e]'
-    : 'border-[#2b2b2b] bg-[#1f1f1f] text-[#94a3b8]'
+    : 'border-[#2b2b2b] bg-[#181818] text-[#9aa4b2]'
 })
+
+function tabBtn(key: TabKey) {
+  return activeTab.value === key
+    ? 'bg-[#181818] text-[#e6e6e6] border border-[#2b2b2b] shadow-[0_1px_0_rgba(255,255,255,.04)]'
+    : 'text-[#a3a3a3] hover:text-[#e6e6e6] hover:bg-[#171717]'
+}
+
+// “Polished” helpers
+const card =
+  'rounded-[12px] border border-[#2b2b2b] bg-[#181818] shadow-[0_10px_30px_rgba(0,0,0,.25)]'
+const cardInner = 'rounded-[10px] border border-[#2b2b2b] bg-[#1f1f1f]'
+const sectionTitle = 'text-sm font-semibold text-[#d4d4d4]'
+const sectionHint = 'text-xs text-[#9a9a9a]'
+const divider = 'border-t border-[#2b2b2b]'
 </script>
 
 <template>
-  <div class="mx-auto w-full max-w-6xl px-5 py-8">
-    <!-- Header -->
-    <header class="mb-8">
-      <div class="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 class="text-2xl font-semibold text-[#d4d4d4]">Settings</h1>
-          <p class="mt-1 text-sm text-[#9a9a9a]">Manage your profile, account, and subscription.</p>
+  <div class="min-h-[calc(100vh-120px)] px-5 py-10">
+    <div class="mx-auto w-full max-w-[980px]">
+      <!-- Top bar -->
+      <div class="mb-8 flex flex-wrap items-center justify-between gap-3">
+        <div class="space-y-1">
+          <div
+            class="inline-flex items-center gap-2 rounded-full border border-[#2b2b2b] bg-[#181818] px-3 py-1 text-xs text-[#9aa4b2]"
+          >
+            <span class="codicon codicon-settings text-[#007acc]" />
+            <span>Settings</span>
+          </div>
+
+          <div class="text-2xl font-semibold tracking-tight text-[#d4d4d4]">
+            Account settings
+          </div>
+
+          <div class="text-sm text-[#9a9a9a] flex items-center gap-2">
+            <span class="inline-flex items-center gap-1">
+              <span class="codicon codicon-account" />
+              Profile
+            </span>
+            <span class="text-[#3a3a3a]">•</span>
+            <span class="inline-flex items-center gap-1">
+              <span class="codicon codicon-key" />
+              Account
+            </span>
+            <span class="text-[#3a3a3a]">•</span>
+            <span class="inline-flex items-center gap-1">
+              <span class="codicon codicon-credit-card" />
+              Billing
+            </span>
+          </div>
         </div>
 
-        <div class="flex items-center gap-2">
+        <div class="flex flex-wrap items-center gap-2">
           <span
-            class="rounded-full border border-[#2b2b2b] bg-[#1f1f1f] px-3 py-1 text-xs text-[#a6a6a6]"
+            class="rounded-full border border-[#2b2b2b] bg-[#181818] px-3 py-1 text-xs text-[#9aa4b2] inline-flex items-center gap-2"
           >
-            Plan: <b class="text-[#d4d4d4]">{{ plan }}</b>
+            <span class="codicon codicon-symbol-property text-[#9aa4b2]" />
+            <span>
+              Plan: <b class="text-[#d4d4d4]">{{ plan }}</b>
+            </span>
           </span>
-          <span class="rounded-full border px-3 py-1 text-xs" :class="billingPill">
-            Billing: <b>{{ billingStatus }}</b>
+
+          <span class="rounded-full border px-3 py-1 text-xs inline-flex items-center gap-2" :class="billingPill">
+            <span class="codicon codicon-verified" />
+            <span>
+              Billing: <b>{{ billingStatus }}</b>
+            </span>
           </span>
         </div>
       </div>
-    </header>
 
-    <div class="grid gap-6 lg:grid-cols-12">
-      <!-- Left: summary card -->
-      <section class="lg:col-span-4 rounded-[12px] border border-[#2b2b2b] bg-[#181818] overflow-hidden">
-        <div class="px-6 py-5 border-b border-[#2b2b2b] bg-[#151515]">
-          <div class="flex items-center gap-4">
-            <div class="relative">
+      <div class="grid gap-6 lg:grid-cols-12">
+        <!-- Left: profile summary -->
+        <section class="lg:col-span-4" :class="card">
+          <div class="border-b border-[#2b2b2b] px-6 py-5">
+            <div class="flex items-center gap-4">
               <img
                 :src="avatarSrc"
                 alt="Avatar"
-                class="h-16 w-16 rounded-full border border-[#2b2b2b] object-cover bg-[#1f1f1f]"
+                class="h-14 w-14 rounded-full border border-[#2b2b2b] bg-[#1f1f1f] object-cover"
               />
-              <span
-                class="absolute -bottom-1 -right-1 h-4 w-4 rounded-full border border-[#181818]"
-                :class="billingStatus === 'active' ? 'bg-[#22c55e]' : 'bg-[#3b3b3b]'"
-              />
-            </div>
 
-            <div class="min-w-0">
-              <div class="truncate text-base font-semibold text-[#d4d4d4]">
-                {{ profile?.name || 'Your profile' }}
-              </div>
-              <div class="truncate text-sm text-[#9a9a9a]">{{ email || '—' }}</div>
-              <div class="mt-1 text-xs text-[#8f8f8f] truncate">
-                {{ profile?.username ? `@${profile.username}` : 'No public username set' }}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="px-6 py-5 space-y-3 text-sm">
-          <div class="rounded-[10px] border border-[#2b2b2b] bg-[#1a1a1a] p-4">
-            <div class="text-xs text-[#8f8f8f]">Account</div>
-            <div class="mt-1 flex items-center justify-between gap-3">
-              <span class="text-[#9a9a9a]">Email</span>
-              <span class="text-[#d4d4d4] truncate max-w-[230px] text-right">{{ email || '—' }}</span>
-            </div>
-          </div>
-
-          <div class="rounded-[10px] border border-[#2b2b2b] bg-[#1a1a1a] p-4">
-            <div class="text-xs text-[#8f8f8f]">Subscription</div>
-            <div class="mt-1 flex items-center justify-between gap-3">
-              <span class="text-[#9a9a9a]">Plan</span>
-              <span class="text-[#d4d4d4]">{{ plan }}</span>
-            </div>
-            <div class="mt-1 flex items-center justify-between gap-3">
-              <span class="text-[#9a9a9a]">Billing</span>
-              <span class="text-[#d4d4d4]">{{ billingStatus }}</span>
-            </div>
-          </div>
-
-          <div v-if="lastUpdate" class="text-xs text-[#8f8f8f]">
-            Last update: <span class="text-[#bdbdbd]">{{ lastUpdate }}</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Right: tabs + panels -->
-      <section class="lg:col-span-8 rounded-[12px] border border-[#2b2b2b] bg-[#181818] overflow-hidden">
-        <!-- Tabs -->
-        <div class="border-b border-[#2b2b2b] bg-[#151515] px-3">
-          <div class="flex flex-wrap gap-1 py-2">
-            <button
-              type="button"
-              @click="activeTab = 'profile'"
-              class="px-4 py-2 text-sm font-semibold rounded-[8px] transition-colors"
-              :class="activeTab === 'profile'
-                ? 'bg-[#1f1f1f] text-[#d4d4d4] border border-[#2b2b2b]'
-                : 'text-[#9a9a9a] hover:text-[#d4d4d4] hover:bg-[#1b1b1b]'"
-            >
-              Profile
-            </button>
-
-            <button
-              type="button"
-              @click="activeTab = 'account'"
-              class="px-4 py-2 text-sm font-semibold rounded-[8px] transition-colors"
-              :class="activeTab === 'account'
-                ? 'bg-[#1f1f1f] text-[#d4d4d4] border border-[#2b2b2b]'
-                : 'text-[#9a9a9a] hover:text-[#d4d4d4] hover:bg-[#1b1b1b]'"
-            >
-              Account
-            </button>
-
-            <button
-              type="button"
-              @click="activeTab = 'billing'"
-              class="px-4 py-2 text-sm font-semibold rounded-[8px] transition-colors"
-              :class="activeTab === 'billing'
-                ? 'bg-[#1f1f1f] text-[#d4d4d4] border border-[#2b2b2b]'
-                : 'text-[#9a9a9a] hover:text-[#d4d4d4] hover:bg-[#1b1b1b]'"
-            >
-              Billing
-            </button>
-          </div>
-        </div>
-
-        <!-- Content -->
-        <div class="px-6 py-6">
-          <!-- Global states -->
-          <div v-if="loading" class="space-y-4">
-            <div class="h-5 w-44 rounded bg-[#1f1f1f] border border-[#2b2b2b]" />
-            <div class="h-10 rounded bg-[#1f1f1f] border border-[#2b2b2b]" />
-            <div class="h-10 rounded bg-[#1f1f1f] border border-[#2b2b2b]" />
-            <div class="h-10 rounded bg-[#1f1f1f] border border-[#2b2b2b]" />
-            <div class="text-sm text-[#8f8f8f]">Loading settings…</div>
-          </div>
-
-          <div v-else>
-            <!-- Error -->
-            <div
-              v-if="errorMsg"
-              class="mb-5 rounded-[10px] border border-[rgba(255,80,80,.35)] bg-[rgba(255,80,80,.08)] px-4 py-3 text-sm text-[#ffb4b4]"
-            >
-              {{ errorMsg }}
-            </div>
-
-            <!-- PROFILE TAB -->
-            <div v-show="activeTab === 'profile'" class="space-y-6">
-              <div class="flex flex-wrap items-start justify-between gap-3">
-                <div>
-                  <h2 class="text-lg font-semibold text-[#d4d4d4]">Profile</h2>
-                  <p class="mt-1 text-sm text-[#9a9a9a]">
-                    View your details. Click <span class="text-[#d4d4d4] font-semibold">Edit profile</span> to make changes.
-                  </p>
-                </div>
-
-                <!-- Toolbar -->
-                <div class="flex items-center gap-2">
-                  <button
-                    v-if="!editingProfile"
-                    type="button"
-                    @click="startEditProfile"
-                    class="inline-flex items-center justify-center rounded-[10px] border border-[#2b2b2b] bg-[#1f1f1f] px-4 py-2.5 text-sm font-bold text-[#d4d4d4] hover:border-[#3399ff]"
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center justify-between gap-3">
+                  <div class="truncate text-sm font-semibold text-[#d4d4d4]">
+                    {{ profile?.name || '—' }}
+                  </div>
+                  <span
+                    class="inline-flex items-center gap-2 rounded-full border border-[#2b2b2b] bg-[#1f1f1f] px-2 py-1 text-[11px] text-[#9aa4b2]"
                   >
-                    Edit profile
-                  </button>
+                    <span class="codicon codicon-person" />
+                    {{ profile?.username ? `@${profile.username}` : '—' }}
+                  </span>
+                </div>
 
-                  <template v-else>
-                    <button
-                      type="button"
-                      @click="cancelEditProfile"
-                      :disabled="saving"
-                      class="inline-flex items-center justify-center rounded-[10px] border border-[#2b2b2b] px-4 py-2.5 text-sm font-bold text-[#d4d4d4] hover:border-[#3399ff] disabled:opacity-60"
-                    >
-                      Cancel
-                    </button>
+                <div class="mt-1 truncate text-sm text-[#9a9a9a] flex items-center gap-2">
+                  <span class="codicon codicon-mail" />
+                  <span class="truncate">{{ email || '—' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
 
-                    <button
-                      type="button"
-                      @click="saveAndExitProfile"
-                      :disabled="saving || !hasChanges || usernameInvalid"
-                      class="inline-flex items-center justify-center rounded-[10px] bg-[#007acc] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#1fa3ff] disabled:opacity-60"
-                    >
-                      {{ saving ? 'Saving…' : 'Save' }}
-                    </button>
-                  </template>
+          <div class="px-6 py-6 space-y-4">
+            <div :class="cardInner" class="px-4 py-3">
+              <div class="flex items-center justify-between gap-3 text-sm">
+                <span class="text-[#a6a6a6] inline-flex items-center gap-2">
+                  <span class="codicon codicon-mail" />
+                  Email
+                </span>
+                <span class="text-[#d4d4d4] truncate max-w-[220px] text-right">
+                  {{ email || '—' }}
+                </span>
+              </div>
+            </div>
+
+            <div :class="cardInner" class="px-4 py-3">
+              <div class="flex items-center justify-between gap-3 text-sm">
+                <span class="text-[#a6a6a6] inline-flex items-center gap-2">
+                  <span class="codicon codicon-symbol-keyword" />
+                  Plan
+                </span>
+                <span class="text-[#d4d4d4]">{{ plan }}</span>
+              </div>
+              <div class="mt-2 flex items-center justify-between gap-3 text-sm">
+                <span class="text-[#a6a6a6] inline-flex items-center gap-2">
+                  <span class="codicon codicon-credit-card" />
+                  Billing
+                </span>
+                <span class="text-[#d4d4d4]">{{ billingStatus }}</span>
+              </div>
+            </div>
+
+            <div v-if="lastUpdate" class="text-xs text-[#8f8f8f] inline-flex items-center gap-2">
+              <span class="codicon codicon-history" />
+              <span>Updated <span class="text-[#cfcfcf]">{{ lastUpdate }}</span></span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Right: tabs + panels -->
+        <section class="lg:col-span-8 overflow-hidden" :class="card">
+          <!-- Header + Tabs -->
+          <div class="border-b border-[#2b2b2b] px-6 py-4">
+            <div class="flex flex-wrap items-start justify-between gap-4">
+              <div>
+                <div class="text-lg font-semibold text-[#d4d4d4] flex items-center gap-2">
+                  <span class="codicon codicon-settings-gear text-[#9aa4b2]" />
+                  Settings
+                </div>
+                <div class="mt-1 text-sm text-[#9a9a9a]">
+                  Manage your profile, account, and billing.
                 </div>
               </div>
 
-              <!-- Read-only hint -->
-              <div
-                v-if="!editingProfile"
-                class="rounded-[12px] border border-[#2b2b2b] bg-[#151515] px-4 py-3 text-sm text-[#9a9a9a]"
+              <!-- Tabs (separate, normal) -->
+              <nav
+                class="inline-flex items-center gap-2 rounded-[10px] border border-[#2b2b2b] bg-[#141414] p-1.5"
+                aria-label="Settings tabs"
               >
-                Editing is disabled. Click <span class="text-[#d4d4d4] font-semibold">Edit profile</span> to update details.
-              </div>
-
-              <form class="space-y-4" @submit.prevent>
-                <div class="grid gap-4 md:grid-cols-2">
-                  <div class="space-y-1.5">
-                    <label class="text-sm font-semibold text-[#cfcfcf]">Display name</label>
-                    <input
-                      v-model="form.name"
-                      :disabled="!editingProfile || saving"
-                      type="text"
-                      placeholder="Alexandru…"
-                      class="w-full rounded-[10px] border border-[#2b2b2b] bg-[#1f1f1f] px-3 py-2.5 text-sm text-[#d4d4d4] outline-none focus:border-[#3399ff] focus:ring-4 focus:ring-[rgba(51,153,255,.20)] disabled:opacity-70 disabled:cursor-not-allowed"
-                    />
-                  </div>
-
-                  <div class="space-y-1.5">
-                    <label class="text-sm font-semibold text-[#cfcfcf]">
-                      Username <span class="text-[#8f8f8f] font-normal">(optional)</span>
-                    </label>
-                    <div class="relative">
-                      <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-[#8f8f8f]">@</span>
-                      <input
-                        v-model="form.username"
-                        :disabled="!editingProfile || saving"
-                        type="text"
-                        placeholder="gadanisor"
-                        class="w-full rounded-[10px] border border-[#2b2b2b] bg-[#1f1f1f] pl-8 pr-3 py-2.5 text-sm text-[#d4d4d4] outline-none focus:border-[#3399ff] focus:ring-4 focus:ring-[rgba(51,153,255,.20)] disabled:opacity-70 disabled:cursor-not-allowed"
-                        :class="usernameInvalid
-                          ? 'border-[rgba(255,80,80,.50)] focus:border-[rgba(255,80,80,.70)] focus:ring-[rgba(255,80,80,.20)]'
-                          : ''"
-                      />
-                    </div>
-                    <p class="text-xs" :class="usernameInvalid ? 'text-[#ffb4b4]' : 'text-[#8f8f8f]'">
-                      {{ usernameHint }}
-                    </p>
-                  </div>
-                </div>
-
-                <div class="space-y-1.5">
-                  <label class="text-sm font-semibold text-[#cfcfcf]">Avatar URL</label>
-                  <div class="flex flex-wrap items-center gap-3">
-                    <input
-                      v-model="form.avatar_url"
-                      :disabled="!editingProfile || saving"
-                      type="url"
-                      placeholder="https://…"
-                      class="flex-1 min-w-[240px] rounded-[10px] border border-[#2b2b2b] bg-[#1f1f1f] px-3 py-2.5 text-sm text-[#d4d4d4] outline-none focus:border-[#3399ff] focus:ring-4 focus:ring-[rgba(51,153,255,.20)] disabled:opacity-70 disabled:cursor-not-allowed"
-                    />
-                    <div class="flex items-center gap-2 rounded-[10px] border border-[#2b2b2b] bg-[#1a1a1a] px-3 py-2">
-                      <img :src="avatarSrc" alt="Preview" class="h-8 w-8 rounded-full border border-[#2b2b2b] object-cover" />
-                      <span class="text-xs text-[#8f8f8f]">Preview</span>
-                    </div>
-                  </div>
-                  <p class="text-xs text-[#8f8f8f]">
-                    Public image URL. (Upload flow can come later.)
-                  </p>
-                </div>
-
-                <div class="flex flex-wrap items-center gap-3 pt-2">
-                  <span v-if="saved" class="text-sm font-semibold text-[#22c55e]">
-                    Saved ✓
-                  </span>
-
-                  <span v-if="editingProfile && !hasChanges" class="text-xs text-[#8f8f8f]">
-                    No unsaved changes
-                  </span>
-                </div>
-              </form>
-            </div>
-
-            <!-- ACCOUNT TAB -->
-            <div v-show="activeTab === 'account'" class="space-y-6">
-              <div>
-                <h2 class="text-lg font-semibold text-[#d4d4d4]">Account</h2>
-                <p class="mt-1 text-sm text-[#9a9a9a]">
-                  Account identifiers are read-only here. Security-related actions are handled elsewhere.
-                </p>
-              </div>
-
-              <div class="grid gap-4 md:grid-cols-2">
-                <div class="rounded-[12px] border border-[#2b2b2b] bg-[#1a1a1a] p-5">
-                  <div class="text-xs text-[#8f8f8f]">Email</div>
-                  <div class="mt-1 text-sm font-semibold text-[#d4d4d4] truncate">{{ email || '—' }}</div>
-                  <div class="mt-2 text-xs text-[#8f8f8f]">
-                    Email is managed by your auth provider.
-                  </div>
-                </div>
-
-                <div class="rounded-[12px] border border-[#2b2b2b] bg-[#1a1a1a] p-5">
-                  <div class="text-xs text-[#8f8f8f]">Profile status</div>
-                  <div class="mt-1 text-sm font-semibold text-[#d4d4d4]">
-                    {{ profile ? 'Active' : 'Not loaded' }}
-                  </div>
-                  <div class="mt-2 text-xs text-[#8f8f8f]">
-                    Last update: <span class="text-[#bdbdbd]">{{ lastUpdate || '—' }}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="rounded-[12px] border border-[#2b2b2b] bg-[#1a1a1a] p-5">
-                <div class="text-sm font-semibold text-[#d4d4d4]">Tips</div>
-                <ul class="mt-2 space-y-1 text-sm text-[#9a9a9a] list-disc pl-5">
-                  <li>Nu afișăm User ID în UI.</li>
-                  <li>Dacă vrei “Change password / Delete account”, fă-le pe o pagină separată cu confirmări.</li>
-                </ul>
-              </div>
-            </div>
-
-            <!-- BILLING TAB -->
-            <div v-show="activeTab === 'billing'" class="space-y-6">
-              <div>
-                <h2 class="text-lg font-semibold text-[#d4d4d4]">Billing</h2>
-                <p class="mt-1 text-sm text-[#9a9a9a]">View plan and billing status (read-only).</p>
-              </div>
-
-              <div class="grid gap-4 md:grid-cols-2">
-                <div class="rounded-[12px] border border-[#2b2b2b] bg-[#1a1a1a] p-5">
-                  <div class="text-xs text-[#8f8f8f]">Current plan</div>
-                  <div class="mt-1 text-xl font-semibold text-[#d4d4d4]">{{ plan }}</div>
-                  <div class="mt-2 text-xs text-[#8f8f8f]">
-                    Upgrades are handled on the pricing page for now.
-                  </div>
-                </div>
-
-                <div class="rounded-[12px] border border-[#2b2b2b] bg-[#1a1a1a] p-5">
-                  <div class="text-xs text-[#8f8f8f]">Billing status</div>
-                  <div
-                    class="mt-1 text-xl font-semibold"
-                    :class="billingStatus === 'active' ? 'text-[#22c55e]' : 'text-[#d4d4d4]'"
-                  >
-                    {{ billingStatus }}
-                  </div>
-                  <div class="mt-2 text-xs text-[#8f8f8f]">
-                    If you think this is wrong, contact support.
-                  </div>
-                </div>
-              </div>
-
-              <div class="flex flex-wrap gap-3">
-                <NuxtLink
-                  to="/#pricing"
-                  class="inline-flex items-center justify-center rounded-[10px] bg-[#007acc] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#1fa3ff]"
+                <button
+                  type="button"
+                  class="group inline-flex items-center gap-2 rounded-[8px] px-3 py-2 text-sm font-semibold transition-all cursor-pointer border"
+                  :class="tabBtn('profile')"
+                  @click="activeTab = 'profile'"
+                  :aria-selected="activeTab === 'profile'"
                 >
-                  Pricing
-                </NuxtLink>
+                  <span class="codicon codicon-account" />
+                  Profile
+                </button>
 
-                <NuxtLink
-                  to="/#download"
-                  class="inline-flex items-center justify-center rounded-[10px] border border-[#2b2b2b] px-4 py-2.5 text-sm font-bold text-[#d4d4d4] hover:border-[#3399ff]"
+                <button
+                  type="button"
+                  class="group inline-flex items-center gap-2 rounded-[8px] px-3 py-2 text-sm font-semibold transition-all cursor-pointer border"
+                  :class="tabBtn('account')"
+                  @click="activeTab = 'account'"
+                  :aria-selected="activeTab === 'account'"
                 >
-                  Download
-                </NuxtLink>
-              </div>
+                  <span class="codicon codicon-key" />
+                  Account
+                </button>
+
+                <button
+                  type="button"
+                  class="group inline-flex items-center gap-2 rounded-[8px] px-3 py-2 text-sm font-semibold transition-all cursor-pointer border"
+                  :class="tabBtn('billing')"
+                  @click="activeTab = 'billing'"
+                  :aria-selected="activeTab === 'billing'"
+                >
+                  <span class="codicon codicon-credit-card" />
+                  Billing
+                </button>
+              </nav>
             </div>
           </div>
-        </div>
-      </section>
+
+          <div class="px-6 py-6">
+            <!-- Loading -->
+            <div v-if="loading" class="space-y-4">
+              <div class="h-5 w-40 rounded bg-[#1f1f1f] border border-[#2b2b2b]" />
+              <div class="h-10 rounded bg-[#1f1f1f] border border-[#2b2b2b]" />
+              <div class="h-10 rounded bg-[#1f1f1f] border border-[#2b2b2b]" />
+              <div class="text-sm text-[#9a9a9a] inline-flex items-center gap-2">
+                <span class="codicon codicon-loading codicon-modifier-spin" />
+                Loading…
+              </div>
+            </div>
+
+            <div v-else class="space-y-5">
+              <!-- Error -->
+              <div
+                v-if="errorMsg"
+                class="rounded-[10px] border border-[rgba(255,80,80,.35)] bg-[rgba(255,80,80,.08)] px-4 py-3 text-sm text-[#ffb4b4] inline-flex items-start gap-2"
+              >
+                <span class="codicon codicon-error" />
+                <span>{{ errorMsg }}</span>
+              </div>
+
+              <!-- PROFILE TAB -->
+              <section v-show="activeTab === 'profile'" class="space-y-5">
+                <header class="flex items-start justify-between gap-4">
+                  <div>
+                    <div class="flex items-center gap-2" :class="sectionTitle">
+                      <span class="codicon codicon-account" />
+                      Profile
+                    </div>
+                    <div class="mt-1" :class="sectionHint">
+                      Update your public profile info.
+                    </div>
+                  </div>
+
+                  <!-- Actions -->
+                  <div class="flex items-center gap-2">
+                    <button
+                      v-if="!editingProfile"
+                      type="button"
+                      @click="startEditProfile"
+                      class="cursor-pointer inline-flex items-center justify-center gap-2 rounded-[10px] border border-[#2b2b2b] bg-[#1f1f1f] px-4 py-2.5 text-sm font-bold text-[#d4d4d4] transition-colors hover:bg-[#232323] hover:border-[#3399ff]"
+                    >
+                      <span class="codicon codicon-edit" />
+                      Edit
+                    </button>
+
+                    <template v-else>
+                      <button
+                        type="button"
+                        @click="cancelEditProfile"
+                        :disabled="saving"
+                        class="cursor-pointer inline-flex items-center justify-center gap-2 rounded-[10px] border border-[#2b2b2b] bg-transparent px-4 py-2.5 text-sm font-bold text-[#d4d4d4] transition-colors hover:bg-[#1f1f1f] disabled:opacity-60"
+                      >
+                        <span class="codicon codicon-close" />
+                        Cancel
+                      </button>
+
+                      <button
+                        type="button"
+                        @click="saveAndExitProfile"
+                        :disabled="saving || !hasChanges || usernameInvalid"
+                        class="cursor-pointer inline-flex items-center justify-center gap-2 rounded-[10px] bg-[#007acc] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#1fa3ff] disabled:opacity-60"
+                      >
+                        <span v-if="saving" class="codicon codicon-loading codicon-modifier-spin" />
+                        <span v-else class="codicon codicon-save" />
+                        {{ saving ? 'Saving…' : 'Save' }}
+                      </button>
+                    </template>
+                  </div>
+                </header>
+
+                <div class="rounded-[12px] border border-[#2b2b2b] bg-[#151515]">
+                  <div class="px-5 py-4 border-b border-[#2b2b2b] flex items-center justify-between gap-3">
+                    <div class="text-sm font-semibold text-[#d4d4d4] inline-flex items-center gap-2">
+                      <span class="codicon codicon-symbol-field" />
+                      Details
+                    </div>
+                    <div class="text-xs text-[#9a9a9a] inline-flex items-center gap-2">
+                      <span class="codicon codicon-shield" />
+                      Your changes are saved to your account
+                    </div>
+                  </div>
+
+                  <div class="p-5 space-y-4">
+                    <!-- Form -->
+                    <form class="space-y-4" @submit.prevent>
+                      <div class="grid gap-4 md:grid-cols-2">
+                        <div class="space-y-1.5">
+                          <label class="text-sm font-semibold text-[#cfcfcf] inline-flex items-center gap-2">
+                            <span class="codicon codicon-person" />
+                            Name
+                          </label>
+                          <input
+                            v-model="form.name"
+                            :disabled="!editingProfile || saving"
+                            type="text"
+                            placeholder="Billy..."
+                            class="w-full rounded-[10px] border border-[#2b2b2b] bg-[#1f1f1f] px-3 py-2.5 text-sm text-[#d4d4d4] outline-none focus:border-[#3399ff] focus:ring-4 focus:ring-[rgba(51,153,255,.20)] disabled:opacity-70 disabled:cursor-not-allowed"
+                          />
+                        </div>
+
+                        <div class="space-y-1.5">
+                          <label class="text-sm font-semibold text-[#cfcfcf] inline-flex items-center gap-2">
+                            <span class="codicon codicon-mention" />
+                            Username
+                          </label>
+                          <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-[#9a9a9a]">@</span>
+                            <input
+                              v-model="form.username"
+                              :disabled="!editingProfile || saving"
+                              type="text"
+                              placeholder="billy123"
+                              class="w-full rounded-[10px] border border-[#2b2b2b] bg-[#1f1f1f] pl-8 pr-3 py-2.5 text-sm text-[#d4d4d4] outline-none focus:border-[#3399ff] focus:ring-4 focus:ring-[rgba(51,153,255,.20)] disabled:opacity-70 disabled:cursor-not-allowed"
+                              :class="
+                                usernameInvalid
+                                  ? 'border-[rgba(255,80,80,.55)] focus:border-[rgba(255,80,80,.75)] focus:ring-[rgba(255,80,80,.18)]'
+                                  : ''
+                              "
+                            />
+                          </div>
+                          <div class="flex items-center justify-between text-xs">
+                            <span :class="usernameInvalid ? 'text-[#ffb4b4]' : 'text-[#8f8f8f]'">
+                              {{ usernameHint }}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="space-y-1.5">
+                        <label class="text-sm font-semibold text-[#cfcfcf] inline-flex items-center gap-2">
+                          <span class="codicon codicon-link" />
+                          Avatar URL
+                        </label>
+
+                        <div class="flex flex-wrap items-center gap-3">
+                          <input
+                            v-model="form.avatar_url"
+                            :disabled="!editingProfile || saving"
+                            type="url"
+                            placeholder="https://…"
+                            class="flex-1 min-w-[240px] rounded-[10px] border border-[#2b2b2b] bg-[#1f1f1f] px-3 py-2.5 text-sm text-[#d4d4d4] outline-none focus:border-[#3399ff] focus:ring-4 focus:ring-[rgba(51,153,255,.20)] disabled:opacity-70 disabled:cursor-not-allowed"
+                          />
+
+                          <div class="flex items-center gap-2 rounded-[10px] border border-[#2b2b2b] bg-[#1f1f1f] px-3 py-2">
+                            <img
+                              :src="avatarSrc"
+                              alt="Preview"
+                              class="h-8 w-8 rounded-full border border-[#2b2b2b] object-cover bg-[#1a1a1a]"
+                            />
+                            <span class="text-xs text-[#9a9a9a] inline-flex items-center gap-2">
+                              <span class="codicon codicon-eye" />
+                              Preview
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="pt-1">
+                        <div class="flex flex-wrap items-center gap-3">
+                          <span v-if="saved" class="text-sm font-semibold text-[#22c55e] inline-flex items-center gap-2">
+                            <span class="codicon codicon-check" />
+                            Saved
+                          </span>
+                          <span v-else-if="editingProfile && !hasChanges" class="text-xs text-[#8f8f8f] inline-flex items-center gap-2">
+                            <span class="codicon codicon-info" />
+                            No changes
+                          </span>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </section>
+
+              <!-- ACCOUNT TAB -->
+              <section v-show="activeTab === 'account'" class="space-y-5">
+                <header>
+                  <div class="flex items-center gap-2" :class="sectionTitle">
+                    <span class="codicon codicon-key" />
+                    Account
+                  </div>
+                  <div class="mt-1" :class="sectionHint">
+                    Account status and security-related info.
+                  </div>
+                </header>
+
+                <div class="rounded-[12px] border border-[#2b2b2b] bg-[#151515]">
+                  <div class="px-5 py-4 border-b border-[#2b2b2b] flex items-center justify-between">
+                    <div class="text-sm font-semibold text-[#d4d4d4] inline-flex items-center gap-2">
+                      <span class="codicon codicon-shield" />
+                      Overview
+                    </div>
+                    <div class="text-xs text-[#9a9a9a] inline-flex items-center gap-2">
+                      <span class="codicon codicon-lock" />
+                      Protected
+                    </div>
+                  </div>
+
+                  <div class="p-5 space-y-4">
+                    <div class="grid gap-4 md:grid-cols-2">
+                      <div :class="cardInner" class="p-5">
+                        <div class="text-xs text-[#9a9a9a] inline-flex items-center gap-2">
+                          <span class="codicon codicon-mail" />
+                          Email
+                        </div>
+                        <div class="mt-1 text-sm font-semibold text-[#d4d4d4] truncate">
+                          {{ email || '—' }}
+                        </div>
+                      </div>
+
+                      <div :class="cardInner" class="p-5">
+                        <div class="text-xs text-[#9a9a9a] inline-flex items-center gap-2">
+                          <span class="codicon codicon-organization" />
+                          Profile
+                        </div>
+                        <div class="mt-1 text-sm font-semibold text-[#d4d4d4]">
+                          {{ profile ? 'Active' : '—' }}
+                        </div>
+                        <div class="mt-2 text-xs text-[#8f8f8f] inline-flex items-center gap-2">
+                          <span class="codicon codicon-history" />
+                          <span>Updated <span class="text-[#cfcfcf]">{{ lastUpdate || '—' }}</span></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div :class="divider" />
+                    <div class="text-sm text-[#9a9a9a] inline-flex items-start gap-2">
+                      <span class="codicon codicon-info" />
+                      <span>
+                        If you need to change your email/password, do it from your auth provider flow (depending on how you configured Supabase Auth).
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- BILLING TAB -->
+              <section v-show="activeTab === 'billing'" class="space-y-5">
+                <header>
+                  <div class="flex items-center gap-2" :class="sectionTitle">
+                    <span class="codicon codicon-credit-card" />
+                    Billing
+                  </div>
+                  <div class="mt-1" :class="sectionHint">
+                    Plan and billing status.
+                  </div>
+                </header>
+
+                <div class="rounded-[12px] border border-[#2b2b2b] bg-[#151515]">
+                  <div class="px-5 py-4 border-b border-[#2b2b2b] flex items-center justify-between">
+                    <div class="text-sm font-semibold text-[#d4d4d4] inline-flex items-center gap-2">
+                      <span class="codicon codicon-symbol-keyword" />
+                      Subscription
+                    </div>
+                    <div class="text-xs text-[#9a9a9a] inline-flex items-center gap-2">
+                      <span class="codicon codicon-tag" />
+                      Manage
+                    </div>
+                  </div>
+
+                  <div class="p-5 space-y-4">
+                    <div class="grid gap-4 md:grid-cols-2">
+                      <div :class="cardInner" class="p-5">
+                        <div class="text-xs text-[#9a9a9a] inline-flex items-center gap-2">
+                          <span class="codicon codicon-symbol-keyword" />
+                          Plan
+                        </div>
+                        <div class="mt-1 text-lg font-semibold text-[#d4d4d4]">{{ plan }}</div>
+                      </div>
+
+                      <div :class="cardInner" class="p-5">
+                        <div class="text-xs text-[#9a9a9a] inline-flex items-center gap-2">
+                          <span class="codicon codicon-verified" />
+                          Billing
+                        </div>
+                        <div
+                          class="mt-1 text-lg font-semibold inline-flex items-center gap-2"
+                          :class="billingStatus === 'active' ? 'text-[#22c55e]' : 'text-[#d4d4d4]'"
+                        >
+                          <span
+                            class="h-2 w-2 rounded-full"
+                            :class="billingStatus === 'active' ? 'bg-[#22c55e]' : 'bg-[#9aa4b2]'"
+                          />
+                          {{ billingStatus }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div :class="divider" />
+
+                    <div class="flex flex-wrap gap-3 pt-1">
+                      <NuxtLink
+                        to="/#pricing"
+                        class="inline-flex items-center justify-center gap-2 rounded-[10px] bg-[#007acc] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#1fa3ff]"
+                      >
+                        <span class="codicon codicon-tag" />
+                        Pricing
+                      </NuxtLink>
+
+                      <NuxtLink
+                        to="/#download"
+                        class="inline-flex items-center justify-center gap-2 rounded-[10px] border border-[#2b2b2b] bg-[#1f1f1f] px-4 py-2.5 text-sm font-bold text-[#d4d4d4] transition-colors hover:bg-[#232323] hover:border-[#3399ff]"
+                      >
+                        <span class="codicon codicon-desktop-download" />
+                        Download
+                      </NuxtLink>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
   </div>
 </template>
