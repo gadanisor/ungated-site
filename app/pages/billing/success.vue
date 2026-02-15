@@ -97,31 +97,35 @@ const openAppUrl = computed(() => {
 })
 
 async function fetchProfileStatus() {
-  if (!user.value) return
+  if (!sessionId.value) return;
 
-  loading.value = true
-  error.value = ''
+  loading.value = true;
 
-  try {
-    const { data, error: e } = await supabase
-      .from('profiles')
-      .select('plan,billing_status')
-      .eq('id', user.value.id)
-      .maybeSingle<ProfileStatusRow>()
+  const res = await fetch(
+    `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/verify-checkout-session`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        session_id: sessionId.value,
+      }),
+    }
+  );
 
-    if (e) throw e
-    if (!data) return
+  const data = await res.json();
 
-    plan.value = data.plan === 'pro' ? 'pro' : 'free'
-    billing.value =
-      data.billing_status === 'active' || data.billing_status === 'canceled'
-        ? data.billing_status
-        : 'inactive'
-  } catch (e: any) {
-    error.value = e?.message || String(e)
-  } finally {
-    loading.value = false
-  }
+  if (!data) return;
+
+  plan.value = data.plan === "pro" ? "pro" : "free";
+  billing.value =
+    data.billing_status === "active" ||
+    data.billing_status === "canceled"
+      ? data.billing_status
+      : "inactive";
+
+  loading.value = false;
 }
 
 async function pollUntilActive() {
