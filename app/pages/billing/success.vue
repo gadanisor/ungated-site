@@ -44,6 +44,7 @@ import { computed, onMounted, ref } from 'vue'
 definePageMeta({ layout: 'default' })
 
 const route = useRoute()
+const config = useRuntimeConfig()
 
 const sessionId = computed(() => {
   const v = route.query.session_id
@@ -81,18 +82,23 @@ async function fetchStatusOnce() {
     return
   }
 
+  const supaUrl = String(config.public.supabaseUrl || '').replace(/\/$/, '')
+  if (!supaUrl) {
+    error.value = 'Missing public.supabaseUrl in runtime config.'
+    return
+  }
+
   loading.value = true
   error.value = ''
 
   try {
-    const res = await fetch(
-      `${import.meta.env.NUXT_PUBLIC_SUPABASE_UR}/functions/v1/verify-checkout-session`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ session_id: sessionId.value }),
-      }
-    )
+    const fnUrl = `${supaUrl}/functions/v1/verify-checkout-session`
+
+    const res = await fetch(fnUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ session_id: sessionId.value }),
+    })
 
     const data = await res.json().catch(() => null)
 
@@ -114,7 +120,6 @@ async function fetchStatusOnce() {
 }
 
 async function pollUntilActive() {
-  // max ~25s
   const start = Date.now()
   const timeoutMs = 25000
   const intervalMs = 1500
@@ -130,16 +135,12 @@ async function pollUntilActive() {
 async function manualRefresh() {
   await fetchStatusOnce()
   if (isActivePro.value) {
-    // user clicked refresh and it's ready -> open app
     window.location.href = openAppUrl.value
   }
 }
 
 onMounted(async () => {
-  // 1) get status
   const ok = await pollUntilActive()
-
-  // 2) if active, deep link to app
   if (ok) {
     window.location.href = openAppUrl.value
   }
