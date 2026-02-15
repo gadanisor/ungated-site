@@ -7,19 +7,7 @@
         Session: <code>{{ sessionId }}</code>
       </p>
 
-      <div v-if="!user" class="notice warning">
-        <p><strong>You are not logged in.</strong></p>
-        <p>
-          Please log in to your account on the website, then return to this page.
-          (We need your session to confirm the plan activation.)
-        </p>
-        <div class="actions">
-          <NuxtLink class="btn primary" to="/login">Go to login</NuxtLink>
-          <NuxtLink class="btn" to="/dashboard">Dashboard</NuxtLink>
-        </div>
-      </div>
-
-      <div v-else class="notice">
+      <div class="notice">
         <p><strong>Activating your plan…</strong></p>
         <p class="muted">
           This may take a few seconds while Stripe confirms the payment.
@@ -53,23 +41,14 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 
-definePageMeta({
-  layout: 'default',
-})
+definePageMeta({ layout: 'default' })
 
 const route = useRoute()
+
 const sessionId = computed(() => {
   const v = route.query.session_id
   return typeof v === 'string' ? v : ''
 })
-
-const supabase = useSupabaseClient()
-const user = useSupabaseUser()
-type ProfileStatusRow = {
-  plan: 'free' | 'pro' | null
-  billing_status: 'active' | 'inactive' | 'canceled' | null
-}
-
 
 const loading = ref(false)
 const error = ref('')
@@ -77,77 +56,93 @@ const error = ref('')
 const plan = ref<'free' | 'pro'>('free')
 const billing = ref<'inactive' | 'active' | 'canceled'>('inactive')
 
+const isActivePro = computed(() => billing.value === 'active' && plan.value === 'pro')
+
 const displayStatus = computed(() => {
-  if (!user.value) return 'not logged in'
-  if (billing.value === 'active' && plan.value === 'pro') return 'Pro active'
+  if (isActivePro.value) return 'Pro active'
   if (billing.value === 'canceled') return 'Canceled'
-  return 'Pending'
+  return loading.value ? 'Checking…' : 'Pending'
 })
 
 const pillClass = computed(() => {
-  if (billing.value === 'active' && plan.value === 'pro') return 'ok'
+  if (isActivePro.value) return 'ok'
   if (billing.value === 'canceled') return 'bad'
   return 'pending'
 })
 
-// Deep link către app (tu vei implementa asta în Electron la pasul următor)
 const openAppUrl = computed(() => {
-  // Poți include și sessionId dacă vrei: ungated://billing/success?session_id=...
-  return 'ungated://billing/success'
+  const sid = sessionId.value ? `?session_id=${encodeURIComponent(sessionId.value)}` : ''
+  return `ungated://billing/success${sid}`
 })
 
-async function fetchProfileStatus() {
-  if (!sessionId.value) return;
+async function fetchStatusOnce() {
+  if (!sessionId.value) {
+    error.value = 'Missing session_id in URL.'
+    return
+  }
 
-  loading.value = true;
+  loading.value = true
+  error.value = ''
 
-  const res = await fetch(
-    `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/verify-checkout-session`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        session_id: sessionId.value,
-      }),
+  try {
+    const res = await fetch(
+      `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/verify-checkout-session`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ session_id: sessionId.value }),
+      }
+    )
+
+    const data = await res.json().catch(() => null)
+
+    if (!res.ok) {
+      error.value = data?.error || data?.message || `Verify failed (${res.status})`
+      return
     }
-  );
 
-  const data = await res.json();
-
-  if (!data) return;
-
-  plan.value = data.plan === "pro" ? "pro" : "free";
-  billing.value =
-    data.billing_status === "active" ||
-    data.billing_status === "canceled"
-      ? data.billing_status
-      : "inactive";
-
-  loading.value = false;
-}
-
-async function pollUntilActive() {
-  // ~25 sec max
-  const start = Date.now()
-  const timeoutMs = 25000
-  const intervalMs = 2000
-
-  while (Date.now() - start < timeoutMs) {
-    await fetchProfileStatus()
-    if (billing.value === 'active' && plan.value === 'pro') break
-    await new Promise((r) => setTimeout(r, intervalMs))
+    plan.value = data?.plan === 'pro' ? 'pro' : 'free'
+    billing.value =
+      data?.billing_status === 'active' || data?.billing_status === 'canceled'
+        ? data.billing_status
+        : 'inactive'
+  } catch (e: any) {
+    error.value = e?.message || String(e)
+  } finally {
+    loading.value = false
   }
 }
 
+async function pollUntilActive() {
+  // max ~25s
+  const start = Date.now()
+  const timeoutMs = 25000
+  const intervalMs = 1500
+
+  while (Date.now() - start < timeoutMs) {
+    await fetchStatusOnce()
+    if (isActivePro.value) return true
+    await new Promise((r) => setTimeout(r, intervalMs))
+  }
+  return isActivePro.value
+}
+
 async function manualRefresh() {
-  await fetchProfileStatus()
+  await fetchStatusOnce()
+  if (isActivePro.value) {
+    // user clicked refresh and it's ready -> open app
+    window.location.href = openAppUrl.value
+  }
 }
 
 onMounted(async () => {
-  if (!user.value) return
-  await pollUntilActive()
+  // 1) get status
+  const ok = await pollUntilActive()
+
+  // 2) if active, deep link to app
+  if (ok) {
+    window.location.href = openAppUrl.value
+  }
 })
 </script>
 
