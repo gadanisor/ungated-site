@@ -86,7 +86,7 @@ async function fetchStatusOnce() {
 
   try {
     const res = await fetch(
-      `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/verify-checkout-session`,
+      `${import.meta.env.NUXT_PUBLIC_SUPABASE_UR}/functions/v1/verify-checkout-session`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
