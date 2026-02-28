@@ -1,11 +1,12 @@
 [build]
   command = "pnpm run build"
-  publish = ".netlify/dist"
+  publish = "dist"
 
 [build.environment]
   NODE_OPTIONS = "--max-old-space-size=4096"
 
+# SPA fallback (dacă ai rute care nu sunt fișiere statice)
 [[redirects]]
   from = "/*"
-  to = "/.netlify/functions/server"
+  to = "/index.html"
   status = 200
