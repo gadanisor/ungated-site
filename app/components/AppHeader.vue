@@ -7,7 +7,7 @@ const authReady = ref(false)
 
 const items = computed(() => [
   {
-    label: 'Docs',
+    label: 'Documentation',
     to: '/docs',
     active: route.path.startsWith('/docs')
   },
@@ -71,7 +71,7 @@ onMounted(async () => {
       <NuxtLink to="/">
         <AppLogo class="w-auto h-6 shrink-0" />
       </NuxtLink>
-      <TemplateMenu />
+      <!-- dropdown menu removed -->
     </template>
 
     <UNavigationMenu
