@@ -1,0 +1,34 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@source "../../../content/**/*";
+
+@theme static {
+  --font-sans: 'Public Sans', sans-serif;
+
+  /* Ungated "VS Code-ish" blue */
+  --color-blue-50:  #e6f2ff;
+  --color-blue-100: #cce5ff;
+  --color-blue-200: #99ccff;
+  --color-blue-300: #66b2ff;
+  --color-blue-400: #3399ff;
+  --color-blue-500: #007acc; /* accent */
+  --color-blue-600: #0062a3;
+  --color-blue-700: #004b7a;
+  --color-blue-800: #003351;
+  --color-blue-900: #001c28;
+  --color-blue-950: #00111a;
+}
+
+.dark {
+  /* Ungated default-dark mapping */
+  --ui-bg: #181818;             /* wb-bg */
+  --ui-bg-muted: #1e1e1e;       /* editor-bg / surface-1 */
+  --ui-bg-elevated: #252526;    /* surface-2 */
+  --ui-bg-accented: #1f1f1f;    /* surface-3 */
+
+  /* Extra polish (safe) */
+  --ui-border: #2b2b2b;         /* border */
+  --ui-text: #cccccc;           /* fg */
+  --ui-text-muted: #9d9d9d;     /* fg-muted */
+}

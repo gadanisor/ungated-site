@@ -1,0 +1,124 @@
+title: Meet [Ungated]{class="text-primary"} — the IDE for writers
+description: A calm, powerful workspace where drafting, worldbuilding, and structure live together. Write faster, connect ideas, and keep your universe coherent — without leaving your flow.
+seo:
+  title: Ungated — The IDE for Writers
+  description: Ungated is a local-first writing IDE for authors and world-builders. Draft fast, connect characters and plots, and manage entire story universes in one workspace.
+navigation: false
+
+hero:
+  segments:
+    - label: Novelists
+      icon: i-lucide-feather
+      title: Draft, revise, ship chapters faster
+      description: Keyboard-first writing, deep search across your project, and smart guidance that keeps your voice consistent.
+    - label: Worldbuilders
+      icon: i-lucide-globe
+      title: Turn your universe into a connected system
+      description: Characters, locations, factions, items — all linked with relationships so you always know what affects what.
+    - label: RPG Creators
+      icon: i-lucide-dices
+      title: Lore, rules, and campaigns in one workspace
+      description: Keep canon clean with structured components, encyclopedia-style pages, and readable share previews.
+
+  links:
+    - label: Get Ungated
+      icon: i-lucide-arrow-right
+      trailing: true
+      to: "#pricing"
+      size: xl
+    - label: Watch a demo
+      icon: i-lucide-play
+      size: xl
+      color: neutral
+      variant: subtle
+      to: "#features"
+
+sections:
+  - title: The IDE built with writers in mind
+    description: Ungated combines drafting, structure, and worldbuilding into one seamless environment so you never break creative flow.
+    id: features
+    orientation: horizontal
+    features:
+      - name: Powerful Drafting
+        description: Write at the speed of thought in a fast, keyboard-first editor with multi-cursor editing, project-wide search, and distraction-free focus.
+        icon: i-lucide-keyboard
+      - name: Intelligent Writing Guidance
+        description: Real-time feedback on grammar, style, pacing, readability, and clarity — far beyond traditional spellcheck.
+        icon: i-lucide-sparkles
+      - name: Rich Story Metadata
+        description: Synopses, tags, notes, and structured links connect chapters, plot points, and character arcs automatically.
+        icon: i-lucide-database
+
+  - title: Build worlds, not folders
+    description: Every part of your story becomes a connected component, helping you understand relationships and narrative structure at scale.
+    orientation: horizontal
+    reverse: true
+    features:
+      - name: Component System
+        description: Model scenes, characters, locations, factions, and story elements as interconnected components that evolve with your project.
+        icon: i-lucide-boxes
+      - name: Timeline & Narrative Structure
+        description: Track plot threads and arcs visually while keeping drafts and structure perfectly synchronized.
+        icon: i-lucide-timeline
+      - name: Reading Mode
+        description: Switch instantly to an immersive book-like view with customizable typography and distraction-free feedback sharing.
+        icon: i-lucide-book
+
+features:
+  title: Built for creative writing
+  description: Ungated gives writers the same power developers expect from an IDE — without sacrificing calm or creativity.
+  items:
+    - title: Markdown First
+      description: Clean Markdown with tables, callouts, and footnotes for long-form writing.
+      icon: i-lucide-file-text
+    - title: Backlinking & Knowledge Web
+      description: Bidirectional links connect ideas into a living story graph.
+      icon: i-lucide-share-2
+    - title: Versioning
+      description: Track revisions, restore instantly, and experiment safely with branching drafts.
+      icon: i-lucide-git-branch
+    - title: Collaboration Ready
+      description: Comments, shared previews, and collaborative workflows for editors and beta readers.
+      icon: i-lucide-users
+    - title: Research & Encyclopedia
+      description: Store references, quotes, and world lore alongside your writing.
+      icon: i-lucide-library
+    - title: Goals & Insights
+      description: Word targets, streak tracking, and readability insights help maintain momentum.
+      icon: i-lucide-target
+
+testimonials:
+  headline: Built by writers, for writers
+  title: Designed to protect creative flow
+  description: Ungated focuses on calm productivity — powerful tools without creative friction.
+  items:
+    - quote: Ungated feels like the first writing tool that actually understands long-form storytelling. Everything connects naturally.
+      user:
+        name: Early Beta Writer
+        description: Fantasy Author
+        avatar:
+          src: https://i.pravatar.cc/120?img=32
+    - quote: The component system changed how I plan stories. Characters, locations, and plots finally live in one place.
+      user:
+        name: Indie Novelist
+        description: Sci-Fi Writer
+        avatar:
+          src: https://i.pravatar.cc/120?img=12
+    - quote: Local-first writing with IDE-level power is exactly what writers have been missing.
+      user:
+        name: Worldbuilder
+        description: RPG Creator
+        avatar:
+          src: https://i.pravatar.cc/120?img=22
+
+cta:
+  title: Stay in flow. Build without limits.
+  description: Your words stay yours. Local-first projects, offline work, and full control — with powerful tools when you need them.
+  links:
+    - label: Get Ungated
+      to: "#pricing"
+      trailingIcon: i-lucide-arrow-right
+    - label: Learn more
+      to: "#features"
+      variant: subtle
+      icon: i-lucide-book-open

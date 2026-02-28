@@ -1,0 +1,82 @@
+title: Simple pricing
+description: Choose the plan that fits your workflow and grow at your own pace.
+seo:
+  title: Pricing
+  description: Flexible plans for every type of builder.
+navigation.icon: i-lucide-credit-card
+
+plans:
+  - title: Apprentice
+    description: Perfect for getting started and exploring the platform.
+    price:
+      month: Free
+      year: Free
+    button:
+      label: Get Started
+      color: neutral
+      variant: subtle
+    features:
+      - Basic usage
+      - Community support
+      - Git sync
+
+  - title: Gardener
+    description: Ideal for regular creators who want more power and flexibility.
+    price:
+      month: $8
+      year: $80
+    highlight: true
+    scale: true
+    button:
+      label: Upgrade
+    features:
+      - Everything in Apprentice tier
+      - More projects
+      - More words
+      - Semantic relationships
+      - Semantic graph view
+      - Custom themes
+
+  - title: Architect
+    description: Advanced tools for power users and large projects.
+    price:
+      month: $15
+      year: $150
+    button:
+      label: Go Pro
+      color: neutral
+      variant: subtle
+    features:
+      - Everything in Gardener tier
+      - Unlimited projects
+      - Smart syntax highlighting & autocomplete
+      - Smart suggestions
+      - Advanced text linter
+      - Structured entity view
+      - Custom entity relationships
+      - Full project management tools
+      - Advanced templates
+      - Unlimited access to all upcoming features
+
+logos:
+  title: Built with modern tools developers love
+  icons:
+    - i-simple-icons-github
+    - i-simple-icons-nuxtdotjs
+    - i-simple-icons-vercel
+    - i-simple-icons-cloudflare
+
+faq:
+  title: Frequently asked questions
+  description: Everything you need to know about subscriptions and plans.
+  items:
+    - label: Is there a free plan?
+      content: Yes. The Apprentice plan is completely free and available forever.
+    - label: Can I upgrade later?
+      content: You can upgrade or downgrade your plan at any time.
+    - label: Do future features cost extra?
+      content: Architect users get unlimited access to all upcoming features.
+    - label: Can I cancel anytime?
+      content: Yes, subscriptions can be cancelled at any moment.
+    - label: Do you offer support?
+      content: Community support is available on all plans, with expanded tooling on paid tiers.
