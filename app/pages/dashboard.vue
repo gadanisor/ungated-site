@@ -8,7 +8,7 @@ useSeoMeta({
 
 const router = useRouter()
 const toast = useToast()
-const { getUser, getProfile, signOut } = useSupabaseAuth()
+const { getUser, getProfile, signOut, supabase } = useSupabaseAuth()
 
 const user = ref<any>(null)
 const profile = ref<UserProfile | null>(null)
@@ -25,7 +25,19 @@ const editForm = ref({
 onMounted(async () => {
   try {
     isLoading.value = true
-    const currentUser = await getUser()
+
+    // first try to fetch the user from the server (auth.getUser())
+    let currentUser = await getUser()
+
+    // if the API returned null we may still have a valid session stored
+    // locally; this can happen during an OAuth callback race.  fall back to
+    // checking getSession() and use the user from there before giving up.
+    if (!currentUser) {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session?.user) {
+        currentUser = session.user
+      }
+    }
 
     if (!currentUser) {
       await router.push('/login')
