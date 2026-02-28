@@ -1,5 +1,9 @@
 <script setup lang="ts">
 const route = useRoute()
+const { supabase } = useSupabaseAuth()
+
+const isAuthenticated = ref(false)
+const user = ref<any>(null)
 
 const items = computed(() => [{
   label: 'Docs',
@@ -15,6 +19,26 @@ const items = computed(() => [{
   label: 'Changelog',
   to: '/changelog'
 }])
+
+onMounted(async () => {
+  // check if there's a current session
+  const { data: { session } } = await supabase.auth.getSession()
+  if (session?.user) {
+    isAuthenticated.value = true
+    user.value = session.user
+  }
+
+  // listen for auth changes
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN' && session?.user) {
+      isAuthenticated.value = true
+      user.value = session.user
+    } else if (event === 'SIGNED_OUT') {
+      isAuthenticated.value = false
+      user.value = null
+    }
+  })
+})
 </script>
 
 <template>
@@ -34,7 +58,9 @@ const items = computed(() => [{
     <template #right>
       <UColorModeButton />
 
+      <!-- Mobile login icon button (hidden when authenticated) -->
       <UButton
+        v-if="!isAuthenticated"
         icon="i-lucide-log-in"
         color="neutral"
         variant="ghost"
@@ -42,20 +68,43 @@ const items = computed(() => [{
         class="lg:hidden"
       />
 
+      <!-- Mobile account button (visible when authenticated) -->
       <UButton
-        label="Sign in"
+        v-if="isAuthenticated"
+        icon="i-lucide-user"
         color="neutral"
-        variant="outline"
-        to="/login"
-        class="hidden lg:inline-flex"
+        variant="ghost"
+        to="/dashboard"
+        class="lg:hidden"
       />
 
+      <!-- Desktop sign in / sign up buttons (hidden when authenticated) -->
+      <template v-if="!isAuthenticated">
+        <UButton
+          label="Sign in"
+          color="neutral"
+          variant="outline"
+          to="/login"
+          class="hidden lg:inline-flex"
+        />
+
+        <UButton
+          label="Sign up"
+          color="neutral"
+          trailing-icon="i-lucide-arrow-right"
+          class="hidden lg:inline-flex"
+          to="/signup"
+        />
+      </template>
+
+      <!-- Desktop account button (visible when authenticated) -->
       <UButton
-        label="Sign up"
-        color="neutral"
-        trailing-icon="i-lucide-arrow-right"
+        v-if="isAuthenticated"
+        icon="i-lucide-user"
+        label="Account"
+        color="primary"
         class="hidden lg:inline-flex"
-        to="/signup"
+        to="/dashboard"
       />
     </template>
 
@@ -68,18 +117,29 @@ const items = computed(() => [{
 
       <USeparator class="my-6" />
 
+      <!-- Mobile menu auth buttons -->
+      <template v-if="!isAuthenticated">
+        <UButton
+          label="Sign in"
+          color="neutral"
+          variant="subtle"
+          to="/login"
+          block
+          class="mb-3"
+        />
+        <UButton
+          label="Sign up"
+          color="neutral"
+          to="/signup"
+          block
+        />
+      </template>
+
       <UButton
-        label="Sign in"
-        color="neutral"
-        variant="subtle"
-        to="/login"
-        block
-        class="mb-3"
-      />
-      <UButton
-        label="Sign up"
-        color="neutral"
-        to="/signup"
+        v-if="isAuthenticated"
+        label="Account"
+        color="primary"
+        to="/dashboard"
         block
       />
     </template>
