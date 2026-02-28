@@ -13,3 +13,12 @@ export interface BlogPost extends ParsedContent {
     avatar: Avatar
   } & Link)[]
 }
+
+// make the shared Supabase client available via nuxtApp.$supabase
+import type { SupabaseClient } from '@supabase/supabase-js'
+
+declare module '#app' {
+  interface NuxtApp {
+    $supabase: SupabaseClient
+  }
+}

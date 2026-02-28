@@ -14,10 +14,15 @@ export interface UserProfile {
 }
 
 export const useSupabaseAuth = () => {
-  const supabaseUrl = useRuntimeConfig().public.supabaseUrl as string
-  const supabaseKey = useRuntimeConfig().public.supabaseAnonKey as string
-
-  const supabase = createClient(supabaseUrl, supabaseKey)
+  // use shared Supabase client provided by plugin (see ~/plugins/supabase.client.ts)
+  const nuxtApp = useNuxtApp()
+  const supabase = nuxtApp.$supabase
+  if (!supabase) {
+    // fallback if plugin didn't run for some reason
+    const supabaseUrl = useRuntimeConfig().public.supabaseUrl as string
+    const supabaseKey = useRuntimeConfig().public.supabaseAnonKey as string
+    throw new Error('Supabase client not initialized')
+  }
 
   const signUp = async (email: string, password: string, name: string) => {
     const { data, error } = await supabase.auth.signUp({
