@@ -1,11 +1,14 @@
 [build]
-  command = "npm run build"
+  command = "pnpm run build"
   publish = ".output/public"
 
-[context.production.environment]
-  # the actual values should be configured in Netlify's UI or via CLI
-  NUXT_PUBLIC_SUPABASE_URL = "${NUXT_PUBLIC_SUPABASE_URL}"
-  NUXT_PUBLIC_SUPABASE_ANON_KEY = "${NUXT_PUBLIC_SUPABASE_ANON_KEY}"
+[build.environment]
+  NODE_OPTIONS = "--max-old-space-size=4096"
+
+# IMPORTANT:
+# Configurează NUXT_PUBLIC_SUPABASE_URL și NUXT_PUBLIC_SUPABASE_ANON_KEY
+# direct în Netlify UI (Site settings -> Environment variables).
+# Nu le seta aici ca "${VAR}" (creează loop).
 
 [[redirects]]
   from = "/*"
