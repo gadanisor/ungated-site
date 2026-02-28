@@ -84,9 +84,9 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     await signUp(payload.data.email, payload.data.password, payload.data.name)
     toast.add({
       title: 'Success',
-      description: 'Account created successfully! Redirecting to dashboard...'
+      description: 'Account created! Please check your email to confirm your account.'
     })
-    await router.push('/dashboard')
+    await router.push('/check-email')
   } catch (error: any) {
     toast.add({
       title: 'Error',

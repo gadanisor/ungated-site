@@ -31,7 +31,8 @@ export const useSupabaseAuth = () => {
       options: {
         data: {
           full_name: name
-        }
+        },
+        emailRedirectTo: `${window.location.origin}/confirm`
       }
     })
 
@@ -53,6 +54,11 @@ export const useSupabaseAuth = () => {
         })
 
       if (profileError) throw profileError
+    }
+
+    // Store email for check-email page
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('signup_email', email)
     }
 
     return data
@@ -114,6 +120,28 @@ export const useSupabaseAuth = () => {
     return data
   }
 
+  const confirmEmail = async (token: string, type: 'email' = 'email') => {
+    const { data, error } = await supabase.auth.verifyOtp({
+      token_hash: token,
+      type
+    })
+
+    if (error) throw error
+    return data
+  }
+
+  const resendConfirmationEmail = async (email: string) => {
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/confirm`
+      }
+    })
+
+    if (error) throw error
+  }
+
   return {
     signUp,
     signIn,
@@ -122,6 +150,8 @@ export const useSupabaseAuth = () => {
     getUser,
     getProfile,
     updateProfile,
+    confirmEmail,
+    resendConfirmationEmail,
     supabase
   }
 }
