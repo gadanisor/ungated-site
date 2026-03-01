@@ -36,7 +36,21 @@ export const useSupabaseAuth = () => {
       }
     })
 
-    if (error) throw error
+    if (error) {
+      // log the raw error for easier debugging in devtools / console
+      // the message the user sees in the UI is just `error.message` so
+      // capturing the full object helps diagnose issues such as missing
+      // columns, permission problems or configuration mistakes.
+      //
+      // common messages from Supabase include "Database error saving new user"
+      // when the underlying table is mis‑configured or an RLS policy blocks
+      // the insert.  Check the network tab / Supabase logs for the
+      // `auth.signUp` request if you see this in production.
+      //
+      // rethrow so the callers (e.g. signup.vue) can show the message.
+      console.error('[useSupabaseAuth] signUp error', error)
+      throw error
+    }
 
     // Create profile after signup
     if (data.user) {
@@ -53,7 +67,20 @@ export const useSupabaseAuth = () => {
           settings: {}
         })
 
-      if (profileError) throw profileError
+      if (profileError) {
+        // Log the profile insert error but do not throw. During sign-up the
+        // new user may not be authenticated yet which will cause RLS to
+        // prevent the insert (resulting in "Database error saving new user").
+        //
+        // Recommended: create a DB trigger (see comment below) that inserts
+        // into `profiles` after a new row is added to `auth.users`. That
+        // server-side trigger avoids RLS/anon role issues and keeps the
+        // client-side flow simple.
+        console.error('[useSupabaseAuth] profile insert error', profileError)
+        // don't throw — allow signUp to succeed even if the profile couldn't
+        // be created from the client. The server trigger (recommended) will
+        // create the profile instead.
+      }
     }
 
     // Store email for check-email page

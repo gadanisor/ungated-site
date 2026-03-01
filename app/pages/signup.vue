@@ -88,6 +88,10 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     })
     await router.push('/check-email')
   } catch (error: any) {
+    // log the full error object so we can inspect it in the browser
+    // developer console / terminal.  Supabase sometimes returns very
+    // generic messages, and this makes debugging easier.
+    console.error('[signup.vue] signUp failed', error)
     toast.add({
       title: 'Error',
       description: error.message,
