@@ -5,9 +5,9 @@
       class="rounded-2xl"
     >
       <NuxtImg
-        src="/images/promo-image.png"
+        src="/images/hero-4.png"
         alt="Promotional image"
-        class="w-full"
+        class="w-full border border-solid border-[#1E1E1E]"
         loading="lazy"
         format="webp"
       />

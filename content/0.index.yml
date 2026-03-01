@@ -6,32 +6,39 @@ seo:
 navigation: false
 
 hero:
+  eyebrow: A new kind of writing workspace
+
+  title: Write stories the way developers build software
+  subtitle: Meet [Ungated]{class="text-primary"} — the IDE for writers
+
+  description: Draft, structure, and evolve entire story universes in one calm workspace. Characters, plots, and lore stay connected automatically so complexity never breaks your flow.
+
   segments:
     - label: Novelists
       icon: i-lucide-feather
-      title: Draft, revise, ship chapters faster
-      description: Keyboard-first writing, deep search across your project, and smart guidance that keeps your voice consistent.
+      title: Draft and revise without friction
+      description: Keyboard-first writing, deep project search, and intelligent guidance that keeps your voice consistent.
     - label: Worldbuilders
       icon: i-lucide-globe
-      title: Turn your universe into a connected system
-      description: Characters, locations, factions, items — all linked with relationships so you always know what affects what.
+      title: Turn worlds into connected systems
+      description: Characters, locations, factions, and lore linked through relationships you can actually navigate.
     - label: RPG Creators
       icon: i-lucide-dices
-      title: Lore, rules, and campaigns in one workspace
-      description: Keep canon clean with structured components, encyclopedia-style pages, and readable share previews.
+      title: Manage canon with clarity
+      description: Structured components, encyclopedia pages, and shareable reading previews keep campaigns coherent.
 
   links:
-    - label: Get Ungated
+    - label: Install Ungated
       icon: i-lucide-arrow-right
       trailing: true
-      to: "#pricing"
+      to: "/docs/getting-started/installation"
       size: xl
     - label: Watch a demo
       icon: i-lucide-play
       size: xl
       color: neutral
       variant: subtle
-      to: "#features"
+      to: "/docs"
 
 sections:
   - title: The IDE built with writers in mind
@@ -64,8 +71,37 @@ sections:
         description: Switch instantly to an immersive book-like view with customizable typography and distraction-free feedback sharing.
         icon: i-lucide-book
 
+  - title: Your story becomes a living system
+    description: Ungated understands relationships between characters, locations, and narrative elements — so complexity never turns into chaos.
+    orientation: horizontal
+    features:
+      - name: Structured Entity View
+        description: Explore characters, factions, locations, and story elements through a structured interface that reveals connections instantly.
+        icon: i-lucide-network
+      - name: Relationship Mapping
+        description: See who appears where, what influences what, and how narrative threads evolve across your entire project.
+        icon: i-lucide-git-branch
+      - name: Knowledge Graph Navigation
+        description: Jump across linked ideas and discover hidden connections through bidirectional linking and contextual references.
+        icon: i-lucide-share-2
+
+  - title: Plan, track, and evolve your story
+    description: Ungated brings project-level clarity to creative writing with dashboards designed for complex storytelling.
+    orientation: horizontal
+    reverse: true
+    features:
+      - name: Plot Dashboard
+        description: Design timelines, arcs, and narrative threads visually while drafts stay perfectly synchronized.
+        icon: i-lucide-timeline
+      - name: Project Dashboard
+        description: Manage tasks, notes, revisions, and milestones from a unified workspace inspired by modern development tools.
+        icon: i-lucide-layout-dashboard
+      - name: Versioning & Iteration
+        description: Experiment freely, track changes over time, and restore earlier story states without losing progress.
+        icon: i-lucide-history
+
 features:
-  title: Built for creative writing
+  title: Everything you expect from an IDE — reimagined for writers
   description: Ungated gives writers the same power developers expect from an IDE — without sacrificing calm or creativity.
   items:
     - title: Markdown First
@@ -116,9 +152,9 @@ cta:
   description: Your words stay yours. Local-first projects, offline work, and full control — with powerful tools when you need them.
   links:
     - label: Get Ungated
-      to: "#pricing"
+      to: "/docs/getting-started/installation"
       trailingIcon: i-lucide-arrow-right
     - label: Learn more
-      to: "#features"
+      to: "/docs"
       variant: subtle
       icon: i-lucide-book-open

@@ -7,6 +7,12 @@ const authReady = ref(false)
 
 const items = computed(() => [
   {
+    label: 'Download',
+    to: '/docs/getting-started/installation',
+    // highlight the menu when on the installation page
+    active: route.path === '/docs/getting-started/installation'
+  },
+  {
     label: 'Documentation',
     to: '/docs',
     active: route.path.startsWith('/docs')
