@@ -20,7 +20,7 @@ watchEffect(() => {
 <template>
   <UContainer>
     <template v-if="page">
-      <UPageHeader v-bind="page" class="py-[50px]" />
+      <UPageHeader v-bind="page" class="py-12.5" />
 
       <UPageBody prose>
         <ContentRenderer :value="page" />
@@ -32,7 +32,7 @@ watchEffect(() => {
       <UPageHeader
         title="Privacy Policy"
         description="Page not found."
-        class="py-[50px]"
+        class="py-12.5"
       />
     </template>
   </UContainer>
