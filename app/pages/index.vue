@@ -43,7 +43,13 @@ useSeoMeta({
       :reverse="section.reverse"
       :features="section.features"
     >
-      <ImagePlaceholder />
+      <template v-if="section.image">
+        <NuxtImg
+          :src="section.image.src"
+          :alt="section.image.alt"
+          class="w-full shadow-lg"
+        />
+      </template>
     </UPageSection>
 
     <UPageSection

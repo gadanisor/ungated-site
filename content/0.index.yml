@@ -45,6 +45,9 @@ sections:
     description: Ungated combines drafting, structure, and worldbuilding into one seamless environment so you never break creative flow.
     id: features
     orientation: horizontal
+    image:
+      src: /images/linter.png
+      alt: "Screenshot of Ungated's writing interface showing a draft with linked characters and locations"
     features:
       - name: Powerful Drafting
         description: Write at the speed of thought in a fast, keyboard-first editor with multi-cursor editing, project-wide search, and distraction-free focus.
@@ -60,6 +63,9 @@ sections:
     description: Every part of your story becomes a connected component, helping you understand relationships and narrative structure at scale.
     orientation: horizontal
     reverse: true
+    image:
+      src: /images/components.gif
+      alt: "Screenshot of Ungated's worldbuilding interface showing a character profile linked to locations and factions"
     features:
       - name: Component System
         description: Model scenes, characters, locations, factions, and story elements as interconnected components that evolve with your project.
@@ -74,6 +80,9 @@ sections:
   - title: Your story becomes a living system
     description: Ungated understands relationships between characters, locations, and narrative elements — so complexity never turns into chaos.
     orientation: horizontal
+    image:
+      src: /images/graph.png
+      alt: "Screenshot of Ungated's knowledge graph interface showing interconnected nodes representing characters, locations, and plot points"
     features:
       - name: Structured Entity View
         description: Explore characters, factions, locations, and story elements through a structured interface that reveals connections instantly.
@@ -88,6 +97,9 @@ sections:
   - title: Plan, track, and evolve your story
     description: Ungated brings project-level clarity to creative writing with dashboards designed for complex storytelling.
     orientation: horizontal
+    image:
+      src: /images/project-dashboard.png
+      alt: "Screenshot of Ungated's project dashboard showing timelines, task lists, and version history for a writing project"
     reverse: true
     features:
       - name: Plot Dashboard
