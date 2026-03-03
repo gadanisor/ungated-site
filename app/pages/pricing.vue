@@ -16,19 +16,43 @@ defineOgImageComponent('Saas')
 const isYearly = ref('0')
 
 const items = ref([
-  {
-    label: 'Monthly',
-    value: '0'
-  },
-  {
-    label: 'Yearly',
-    value: '1'
-  }
+  { label: 'Monthly', value: '0' },
+  { label: 'Yearly', value: '1' }
 ])
+
+// ✅ Toggle central pentru moment
+const paymentsEnabled = ref(false)
+
+const planButton = (plan: any) => {
+  // dacă plățile sunt active, folosește butonul original
+  if (paymentsEnabled.value) return plan.button
+
+  // altfel: dezactivează și schimbă labelul
+  return {
+    ...plan.button,
+    label: 'Coming soon',
+    disabled: true,
+    to: plan.button?.to || '#'
+  }
+}
 </script>
 
 <template>
   <div v-if="page">
+       <!-- ✅ Early beta / payments disabled banner -->
+    <UContainer class="mt-6">
+      <UAlert
+        icon="i-lucide-flask-conical"
+        color="warning"
+        variant="soft"
+        class="items-center"
+        :ui="{
+          wrapper: 'items-center'
+        }"
+        :title="page.betaNotice?.title || 'Early beta: payments are disabled for now'"
+        :description="page.betaNotice?.description || 'We\'re not processing payments yet. The app is in early beta and all plans/features are unlocked for free.'"
+      />
+    </UContainer>
     <UPageHero
       :title="page.title"
       :description="page.description"
@@ -49,28 +73,18 @@ const items = ref([
       </template>
     </UPageHero>
 
-    <UContainer>
+    <UContainer class="mt-6">
       <UPricingPlans scale>
         <UPricingPlan
           v-for="(plan, index) in page.plans"
           :key="index"
           v-bind="plan"
+          :button="planButton(plan)"
           :price="isYearly === '1' ? plan.price.year : plan.price.month"
           :billing-cycle="isYearly === '1' ? '/year' : '/month'"
         />
       </UPricingPlans>
     </UContainer>
-
-    <!-- <UPageSection>
-      <UPageLogos>
-        <UIcon
-          v-for="icon in page.logos.icons"
-          :key="icon"
-          :name="icon"
-          class="w-12 h-12 shrink-0 text-muted"
-        />
-      </UPageLogos>
-    </UPageSection> -->
 
     <UPageSection
       :title="page.faq.title"

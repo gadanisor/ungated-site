@@ -22,7 +22,9 @@ const createLinkSchema = () => z.object({
   trailing: z.boolean().optional(),
   target: z.string().optional(),
   color: colorEnum.optional(),
-  variant: variantEnum.optional()
+  variant: variantEnum.optional(),
+  // ✅ pentru Pricing buttons "Coming soon"
+  disabled: z.boolean().optional()
 })
 
 const createImageSchema = () => z.object({
@@ -45,6 +47,7 @@ export const collections = {
           id: z.string().nonempty(),
           orientation: orientationEnum.optional(),
           reverse: z.boolean().optional(),
+          image: createImageSchema().optional(),
           features: z.array(createFeatureItemSchema())
         })
       ),
@@ -71,14 +74,22 @@ export const collections = {
       })
     })
   }),
+
   docs: defineCollection({
     source: '1.docs/**/*',
     type: 'page'
   }),
+
   pricing: defineCollection({
     source: '2.pricing.yml',
     type: 'page',
     schema: z.object({
+      // ✅ nou: banner early beta
+      betaNotice: z.object({
+        title: z.string().nonempty(),
+        description: z.string().nonempty()
+      }).optional(),
+
       plans: z.array(
         z.object({
           title: z.string().nonempty(),
@@ -87,17 +98,22 @@ export const collections = {
             month: z.string().nonempty(),
             year: z.string().nonempty()
           }),
-          billing_period: z.string().nonempty(),
-          billing_cycle: z.string().nonempty(),
+
+          // ✅ înainte erau required, dar YAML-ul tău nu le avea
+          billing_period: z.string().optional(),
+          billing_cycle: z.string().optional(),
+
           button: createLinkSchema(),
           features: z.array(z.string().nonempty()),
           highlight: z.boolean().optional()
         })
       ),
+
       logos: z.object({
         title: z.string().nonempty(),
         icons: z.array(z.string())
       }),
+
       faq: createBaseSchema().extend({
         items: z.array(
           z.object({
@@ -108,10 +124,12 @@ export const collections = {
       })
     })
   }),
+
   blog: defineCollection({
     source: '3.blog.yml',
     type: 'page'
   }),
+
   posts: defineCollection({
     source: '3.blog/**/*',
     type: 'page',
@@ -128,10 +146,12 @@ export const collections = {
       badge: z.object({ label: z.string().nonempty() })
     })
   }),
+
   changelog: defineCollection({
     source: '4.changelog.yml',
     type: 'page'
   }),
+
   versions: defineCollection({
     source: '4.changelog/**/*',
     type: 'page',
@@ -142,8 +162,9 @@ export const collections = {
       image: z.string()
     })
   }),
+
   privacy: defineCollection({
-  source: '5.privacy.md',
-  type: 'page'
-})
+    source: '5.privacy.md',
+    type: 'page'
+  })
 }

@@ -13,6 +13,7 @@ plans:
       year: Free
     button:
       label: Get Started
+      to: "#"
       color: neutral
       variant: subtle
     features:
@@ -29,6 +30,7 @@ plans:
     scale: true
     button:
       label: Upgrade
+      to: "#"
     features:
       - Everything in Apprentice tier
       - More projects
@@ -44,6 +46,7 @@ plans:
       year: $150
     button:
       label: Go Pro
+      to: "#"
       color: neutral
       variant: subtle
     features:
