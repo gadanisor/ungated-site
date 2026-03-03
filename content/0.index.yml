@@ -33,8 +33,8 @@ hero:
       trailing: true
       to: "/docs/getting-started/installation"
       size: xl
-    - label: Watch a demo
-      icon: i-lucide-play
+    - label: Learn More
+      icon: i-lucide-book-open
       size: xl
       color: neutral
       variant: subtle
