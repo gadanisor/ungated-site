@@ -141,5 +141,9 @@ export const collections = {
       date: z.date(),
       image: z.string()
     })
-  })
+  }),
+  privacy: defineCollection({
+  source: '5.privacy.md',
+  type: 'page'
+})
 }
