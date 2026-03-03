@@ -1,38 +1,23 @@
 <script setup lang="ts">
-const columns = [{
-  label: 'Resources',
-  children: [{
-    label: 'Help center'
-  }, {
-    label: 'Docs'
-  }, {
-    label: 'Roadmap'
-  }, {
-    label: 'Changelog'
-  }]
-}, {
-  label: 'Features',
-  children: [{
-    label: 'Affiliates'
-  }, {
-    label: 'Portal'
-  }, {
-    label: 'Jobs'
-  }, {
-    label: 'Sponsors'
-  }]
-}, {
-  label: 'Company',
-  children: [{
-    label: 'About'
-  }, {
-    label: 'Pricing'
-  }, {
-    label: 'Careers'
-  }, {
-    label: 'Blog'
-  }]
-}]
+const columns = [
+  {
+    label: 'Resources',
+    children: [
+      { label: 'Docs', to: '/docs' },
+      { label: 'Roadmap', to: '/roadmap' },
+      { label: 'Changelog', to: '/changelog' }
+    ]
+  },
+  {
+    label: 'Company',
+    children: [
+      { label: 'About', to: '/about' },
+      { label: 'Pricing', to: '/pricing' },
+      { label: 'Blog', to: '/blog' },
+      { label: 'Privacy', to: '/privacy' }
+    ]
+  }
+]
 
 const toast = useToast()
 
@@ -44,8 +29,10 @@ function onSubmit() {
 
   toast.add({
     title: 'Subscribed!',
-    description: 'You\'ve been subscribed to our newsletter.'
+    description: "You've been subscribed to our newsletter."
   })
+
+  loading.value = false
 }
 </script>
 
@@ -88,18 +75,20 @@ function onSubmit() {
       </UContainer>
     </template>
 
+    <!-- bottom left -->
     <template #left>
       <p class="text-muted text-sm">
-        Built with Nuxt UI • © {{ new Date().getFullYear() }}
+        Ungated © {{ new Date().getFullYear() }}
       </p>
     </template>
 
+    <!-- bottom right -->
     <template #right>
       <UButton
         to="https://go.nuxt.com/discord"
         target="_blank"
         icon="i-simple-icons-discord"
-        aria-label="Nuxt on Discord"
+        aria-label="Discord"
         color="neutral"
         variant="ghost"
       />
@@ -107,7 +96,7 @@ function onSubmit() {
         to="https://go.nuxt.com/x"
         target="_blank"
         icon="i-simple-icons-x"
-        aria-label="Nuxt on X"
+        aria-label="X"
         color="neutral"
         variant="ghost"
       />
@@ -115,7 +104,7 @@ function onSubmit() {
         to="https://github.com/nuxt-ui-templates/saas"
         target="_blank"
         icon="i-simple-icons-github"
-        aria-label="Nuxt UI on GitHub"
+        aria-label="GitHub"
         color="neutral"
         variant="ghost"
       />
