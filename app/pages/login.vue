@@ -34,24 +34,26 @@ const fields = [{
   type: 'checkbox' as const
 }]
 
-const providers = [{
-  label: 'Google',
-  icon: 'i-simple-icons-google',
-  onClick: async () => {
-    try {
-      isLoading.value = true
-      await signInWithOAuth('google')
-    } catch (error: any) {
-      toast.add({
-        title: 'Error',
-        description: error.message,
-        color: 'error'
-      })
-    } finally {
-      isLoading.value = false
-    }
-  }
-}, {
+const providers = [
+//   {
+//   label: 'Google',
+//   icon: 'i-simple-icons-google',
+//   onClick: async () => {
+//     try {
+//       isLoading.value = true
+//       await signInWithOAuth('google')
+//     } catch (error: any) {
+//       toast.add({
+//         title: 'Error',
+//         description: error.message,
+//         color: 'error'
+//       })
+//     } finally {
+//       isLoading.value = false
+//     }
+//   }
+// }, 
+{
   label: 'GitHub',
   icon: 'i-simple-icons-github',
   onClick: async () => {
