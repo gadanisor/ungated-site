@@ -18,8 +18,8 @@ useHead({
 })
 
 useSeoMeta({
-  titleTemplate: '%s - Nuxt SaaS template',
-  ogImage: 'https://ui.nuxt.com/assets/templates/nuxt/saas-light.png',
+  titleTemplate: '%s - The IDE for writers',
+  ogImage: 'https://imgur.com/a/COdPYJa',
   twitterImage: 'https://ui.nuxt.com/assets/templates/nuxt/saas-light.png',
   twitterCard: 'summary_large_image'
 })
