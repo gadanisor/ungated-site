@@ -19,7 +19,7 @@ useHead({
 
 useSeoMeta({
   titleTemplate: '%s - The IDE for writers',
-  ogImage: 'https://imgur.com/a/COdPYJa',
+  ogImage: 'https://i.imgur.com/WGxRnGA.png',
   twitterImage: 'https://ui.nuxt.com/assets/templates/nuxt/saas-light.png',
   twitterCard: 'summary_large_image'
 })
