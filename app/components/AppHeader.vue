@@ -17,10 +17,10 @@ const items = computed(() => [
     to: '/docs',
     active: route.path.startsWith('/docs')
   },
-  {
-    label: 'Pricing',
-    to: '/pricing'
-  },
+  // {
+  //   label: 'Pricing',
+  //   to: '/pricing'
+  // },
   {
     label: 'Blog',
     to: '/blog'
