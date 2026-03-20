@@ -44,11 +44,11 @@ useSeoMeta({
       :features="section.features"
     >
       <template v-if="section.image">
-        <NuxtImg
+        <img
           :src="section.image.src"
           :alt="section.image.alt"
           class="w-full shadow-lg"
-        />
+        >
       </template>
     </UPageSection>
 
